@@ -1,5 +1,7 @@
 package example.server.DataBase;
 
+import example.server.models.Post;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,4 +30,20 @@ public class Post_DataBase {
         statement.executeUpdate();
     }
 
+    public void insertPost(Post post) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (email, title, content, created_at) VALUES (?, ?, ?, ?)");
+        statement.setString(1,post.getAuthor());
+        statement.setString(2,post.getTitle());
+        statement.setString(3,post.getContent());
+        statement.setString(4,post.getCreatedAt());
+        statement.executeUpdate();
+    }
+
+    public void updatePost(Post post) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("UPDATE posts SET title=?, content=? WHERE id=?");
+        statement.setString(1,post.getTitle());
+        statement.setString(2,post.getContent());
+        statement.setInt(3,post.getId());
+        statement.executeUpdate();
+    }
 }
