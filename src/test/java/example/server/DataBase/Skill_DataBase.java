@@ -60,6 +60,12 @@ public class Skill_DataBase {
 
     }
 
+    public void deleteSkillByEmail(String email) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE email = ?");
+        statement.setString(1, email);
+        statement.executeUpdate();
+    }
+
     public void deleteAllSkills() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM skills");
         statement.executeUpdate();

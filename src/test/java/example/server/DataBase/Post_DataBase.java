@@ -51,6 +51,12 @@ public class Post_DataBase {
         statement.executeUpdate();
     }
 
+    public void deletePostByEmail(String email) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM posts WHERE email=?");
+        statement.setString(1,email);
+        statement.executeUpdate();
+    }
+
     public void deleteAllPosts() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM posts");
         statement.executeUpdate();
