@@ -51,4 +51,21 @@ public class User_DataBase {
         preparedStatement.setString(10, user.getCity());
         preparedStatement.executeUpdate();
     }
+
+    public void updateUser(User user) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET email = ?, password = ?, name = ?, lastName = ?, additionalName = ?, avatar_url = ?, background_url = ?, headline = ?, country = ?, city = ? WHERE id = ?");
+        preparedStatement.setString(1, user.getEmail());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getFirstName());
+        preparedStatement.setString(4, user.getLastName());
+        preparedStatement.setString(5, user.getAdditionalName());
+        preparedStatement.setString(6, user.getAvatar_url());
+        preparedStatement.setString(7, user.getBackground_url());
+        preparedStatement.setString(8, user.getHeadline());
+        preparedStatement.setString(9, user.getCountry());
+        preparedStatement.setString(10, user.getCity());
+        preparedStatement.setInt(11, user.getId());
+        preparedStatement.executeUpdate();
+
+    }
 }
