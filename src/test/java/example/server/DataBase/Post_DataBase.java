@@ -20,7 +20,7 @@ public class Post_DataBase {
                 + "email VARCHAR(255) NOT NULL,"
                 + "title VARCHAR(255) NOT NULL,"
                 + "content VARCHAR(3000) NOT NULL,"
-                + "created_at VARCHAR(40) NOT NULL"
+                + "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                 + "likes INT NOT NULL DEFAULT 0,"
                 + "comments INT NOT NULL DEFAULT 0,"
                 + "FOREIGN KEY(email) REFERENCES users (email) ON DELETE CASCADE"
@@ -30,11 +30,10 @@ public class Post_DataBase {
     }
 
     public void insertPost(Post post) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (email, title, content, created_at) VALUES (?, ?, ?, ?)");
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (email, title, content) VALUES (?, ?, ?)");
         statement.setString(1,post.getAuthor());
         statement.setString(2,post.getTitle());
         statement.setString(3,post.getContent());
-        statement.setString(4,post.getCreatedAt());
         statement.executeUpdate();
     }
 
@@ -68,7 +67,7 @@ public class Post_DataBase {
             String author = resultSet.getString("email");
             String title = resultSet.getString("title");
             String content = resultSet.getString("content");
-            String createdAt = resultSet.getString("created_at");
+            Timestamp createdAt = resultSet.getTimestamp("created_at");
             int likes = resultSet.getInt("likes");
             int comments = resultSet.getInt("comments");
 
@@ -90,7 +89,7 @@ public class Post_DataBase {
             String author = resultSet.getString("email");
             String title = resultSet.getString("title");
             String content = resultSet.getString("content");
-            String createdAt = resultSet.getString("created_at");
+            Timestamp createdAt = resultSet.getTimestamp("created_at");
             int likes = resultSet.getInt("likes");
             int comments = resultSet.getInt("comments");
 
@@ -113,7 +112,7 @@ public class Post_DataBase {
             String author = resultSet.getString("email");
             String title = resultSet.getString("title");
             String content = resultSet.getString("content");
-            String createdAt = resultSet.getString("created_at");
+            Timestamp createdAt = resultSet.getTimestamp("created_at");
             int likes = resultSet.getInt("likes");
             int comments = resultSet.getInt("comments");
 
