@@ -68,4 +68,15 @@ public class User_DataBase {
         preparedStatement.executeUpdate();
 
     }
+
+    public void deleteUser(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
+        statement.setInt(1, id);
+        statement.executeUpdate();
+    }
+
+    public void deleteAllUsers() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM users");
+        statement.executeUpdate();
+    }
 }
