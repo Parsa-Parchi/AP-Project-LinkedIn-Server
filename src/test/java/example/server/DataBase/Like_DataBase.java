@@ -1,5 +1,7 @@
 package example.server.DataBase;
 
+import example.server.models.Like;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -25,4 +27,40 @@ public class Like_DataBase {
 
         preparedStatement.executeUpdate();
     }
+
+    public void insertLike(Like like) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO likes (post_id, email) VALUES (?, ?)");
+        preparedStatement.setInt(1, like.getPostId());
+        preparedStatement.setString(2, like.getEmail());
+        preparedStatement.executeUpdate();
+
+    }
+
+    public void deleteLike(int postId ,String email) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM likes WHERE post_id = ? AND email = ?");
+        preparedStatement.setInt(1, postId);
+        preparedStatement.setString(2, email);
+        preparedStatement.executeUpdate();
+
+    }
+
+    public void deleteLikesOfUser(String email) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM likes WHERE email = ?");
+        preparedStatement.setString(1, email);
+        preparedStatement.executeUpdate();
+
+    }
+
+    public void deleteLikesOfPost(int postId) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM likes WHERE post_id = ?");
+        preparedStatement.setInt(1, postId);
+        preparedStatement.executeUpdate();
+
+    }
+
+    public void deleteAllLikes() throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM likes");
+        preparedStatement.executeUpdate();
+    }
+
 }
