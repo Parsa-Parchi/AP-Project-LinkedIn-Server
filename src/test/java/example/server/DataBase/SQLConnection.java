@@ -9,7 +9,7 @@ public class SQLConnection {
     private static final String USER = "root";
     private static final String PASSWORD = "Parsa_prc78";
 
-    private static Connection conn = null;
+    private static Connection conn ;
 
     private SQLConnection() {
         // Singleton design pattern
