@@ -2,9 +2,8 @@ package example.server.DataBase;
 
 import example.server.models.Post;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class Post_DataBase {
     private final Connection connection;
@@ -46,4 +45,88 @@ public class Post_DataBase {
         statement.setInt(3,post.getId());
         statement.executeUpdate();
     }
+
+    public void deletePost(Post post) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM posts WHERE id=?");
+        statement.setInt(1,post.getId());
+        statement.executeUpdate();
+    }
+
+    public void deleteAllPosts() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM posts");
+        statement.executeUpdate();
+    }
+
+    public Post getPost(int id) throws SQLException {
+
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE id=?");
+        statement.setInt(1,id);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            int postId = resultSet.getInt("id");
+            String author = resultSet.getString("email");
+            String title = resultSet.getString("title");
+            String content = resultSet.getString("content");
+            String createdAt = resultSet.getString("created_at");
+            int likes = resultSet.getInt("likes");
+            int comments = resultSet.getInt("comments");
+
+            return new Post(postId,likes,comments,author,title,content,createdAt);
+        }
+
+        return null;
+    }
+
+    public ArrayList<Post> getPosts(String email) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE email = ?");
+        statement.setString(1,email);
+        ResultSet resultSet = statement.executeQuery();
+
+        ArrayList<Post> posts = new ArrayList<>();
+
+        while (resultSet.next()) {
+            int postId = resultSet.getInt("id");
+            String author = resultSet.getString("email");
+            String title = resultSet.getString("title");
+            String content = resultSet.getString("content");
+            String createdAt = resultSet.getString("created_at");
+            int likes = resultSet.getInt("likes");
+            int comments = resultSet.getInt("comments");
+
+            Post post = new Post(postId,likes,comments,author,title,content,createdAt);
+
+            posts.add(post);
+        }
+
+        return posts;
+
+    }
+
+    public ArrayList<Post> getAllPosts() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts");
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Post> posts = new ArrayList<>();
+        while (resultSet.next()) {
+
+            int postId = resultSet.getInt("id");
+            String author = resultSet.getString("email");
+            String title = resultSet.getString("title");
+            String content = resultSet.getString("content");
+            String createdAt = resultSet.getString("created_at");
+            int likes = resultSet.getInt("likes");
+            int comments = resultSet.getInt("comments");
+
+            Post post = new Post(postId,likes,comments,author,title,content,createdAt);
+
+            posts.add(post);
+        }
+        return posts;
+    }
+
+
+
+
+
+
 }
