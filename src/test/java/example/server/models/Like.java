@@ -18,7 +18,7 @@ public class Like {
         this.likeTime = likeTime;
     }
 
-    public Like(int postId, String email) {
+    public Like(int postId, String email, Timestamp likeTime) {
         this.postId = postId;
         this.email = email;
     }

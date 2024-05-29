@@ -2,9 +2,8 @@ package example.server.DataBase;
 
 import example.server.models.Like;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class Like_DataBase {
     private final Connection connection;
@@ -61,6 +60,34 @@ public class Like_DataBase {
     public void deleteAllLikes() throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM likes");
         preparedStatement.executeUpdate();
+    }
+
+    public ArrayList<Like> getLikesOfPost(int postId) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM likes WHERE post_id = ?");
+        preparedStatement.setInt(1, postId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        ArrayList<Like> likes = new ArrayList<>();
+        while (resultSet.next()) {
+            Like like = new Like(resultSet.getInt("id"), resultSet.getString("email"), resultSet.getTimestamp("like_time"));
+            likes.add(like);
+
+        }
+        return likes;
+    }
+
+    public ArrayList<Like> getLikesOfUser(String email) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM likes WHERE email = ?");
+        preparedStatement.setString(1, email);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        ArrayList<Like> likes = new ArrayList<>();
+        while (resultSet.next()) {
+
+            Like like = new Like(resultSet.getInt("id"), resultSet.getString("email"), resultSet.getTimestamp("like_time"));
+            likes.add(like);
+
+        }
+        return likes;
     }
 
 }
