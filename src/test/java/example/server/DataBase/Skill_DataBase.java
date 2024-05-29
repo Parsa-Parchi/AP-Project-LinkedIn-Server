@@ -4,6 +4,7 @@ import example.server.models.Skill;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Skill_DataBase {
@@ -51,4 +52,37 @@ public class Skill_DataBase {
         statement.executeUpdate();
 
     }
+
+    public void deleteSkill(Skill skill) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
+        statement.setInt(1, skill.getId());
+        statement.executeUpdate();
+
+    }
+
+    public void deleteAllSkills() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM skills");
+        statement.executeUpdate();
+
+    }
+
+    public Skill getSkill(String email) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM skills WHERE email = ?");
+        statement.setString(1, email);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String skill_1 = resultSet.getString("skill_1");
+            String skill_2 = resultSet.getString("skill_2");
+            String skill_3 = resultSet.getString("skill_3");
+            String skill_4 = resultSet.getString("skill_4");
+            String skill_5 = resultSet.getString("skill_5");
+
+            return new Skill(skill_1,skill_2,skill_3,skill_4,skill_5,id,email);
+        }
+        return null;
+    }
+
+
 }
