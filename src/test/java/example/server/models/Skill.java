@@ -13,7 +13,7 @@ public class Skill {
 
 
     public Skill(String skill_1, String skill_2, String skill_3, String skill_4, String skill_5, int id, String email) {
-        Skill_1 = skill_1;
+        this.Skill_1 = skill_1;
         this.skill_2 = skill_2;
         this.skill_3 = skill_3;
         this.skill_4 = skill_4;

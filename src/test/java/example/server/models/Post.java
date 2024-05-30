@@ -1,5 +1,7 @@
 package example.server.models;
 
+import java.sql.Timestamp;
+
 public class Post {
     private int id;
     private int likes;
@@ -7,9 +9,9 @@ public class Post {
     private String author;
     private String title;
     private String content;
-    private String createdAt;
+    private Timestamp createdAt;
 
-    public Post(int id, int likes, int comments, String author, String title, String content, String createdAt) {
+    public Post(int id, int likes, int comments, String author, String title, String content, Timestamp createdAt) {
         this.id = id;
         this.likes = likes;
         this.comments = comments;
@@ -73,11 +75,12 @@ public class Post {
         this.content = content;
     }
 
-    public String getCreatedAt() {
+    public Timestamp getCreatedAt() {
+
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 

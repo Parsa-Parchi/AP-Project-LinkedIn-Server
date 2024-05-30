@@ -1,22 +1,24 @@
 package example.server.models;
 
 
+import java.sql.Timestamp;
+
 public class Like {
     private int id;
     private int postId;
     private String email;
-    private String likeTime;
+    private Timestamp likeTime;
 
 
 
-    public Like(int id, int postId, String email, String likeTime) {
+    public Like(int id, int postId, String email, Timestamp likeTime) {
         this.id = id;
         this.postId = postId;
         this.email = email;
         this.likeTime = likeTime;
     }
 
-    public Like(int postId, String email) {
+    public Like(int postId, String email, Timestamp likeTime) {
         this.postId = postId;
         this.email = email;
     }
@@ -45,11 +47,11 @@ public class Like {
         this.email = email;
     }
 
-    public String getLikeTime() {
+    public Timestamp getLikeTime() {
         return likeTime;
     }
 
-    public void setLikeTime(String likeTime) {
+    public void setLikeTime(Timestamp likeTime) {
         this.likeTime = likeTime;
     }
 }
