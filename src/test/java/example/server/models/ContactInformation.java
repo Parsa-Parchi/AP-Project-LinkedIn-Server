@@ -12,7 +12,7 @@ public class ContactInformation {
     private String address;
     private Date birthDate;
     private String fastConnect;
-    private String visibility;
+    private String access_level;
 
 
     public ContactInformation(String email, String viewLink, String mobile_PhoneNumber) {
@@ -21,7 +21,7 @@ public class ContactInformation {
         Mobile_PhoneNumber = mobile_PhoneNumber;
     }
 
-    public ContactInformation(int id, String email, String viewLink, String mobile_PhoneNumber, String home_PhoneNumber, String workplace_PhoneNumber, String address, Date birthDate, String fastConnect, String visibility) {
+    public ContactInformation(int id, String email, String viewLink, String mobile_PhoneNumber, String home_PhoneNumber, String workplace_PhoneNumber, String address, Date birthDate, String fastConnect, String access_level) {
         this.id = id;
         this.email = email;
         this.viewLink = viewLink;
@@ -31,7 +31,8 @@ public class ContactInformation {
         this.address = address;
         this.birthDate = birthDate;
         this.fastConnect = fastConnect;
-        this.visibility = visibility;
+        this.access_level = access_level;
+
     }
 
     public int getId() {
@@ -66,7 +67,7 @@ public class ContactInformation {
         Mobile_PhoneNumber = mobile_PhoneNumber;
     }
 
-    public String getHome_PhoneNumber() {
+    public String getHome_PhoneNumber()  {
         return Home_PhoneNumber;
     }
 
@@ -106,12 +107,16 @@ public class ContactInformation {
         this.fastConnect = fastConnect;
     }
 
-    public String getVisibility() {
-        return visibility;
+    public String getAccess_level() {
+        return access_level;
     }
 
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
+    public void setAccess_level(String access_level) {
+        this.access_level = access_level;
+
     }
+
+
+
 
 }
