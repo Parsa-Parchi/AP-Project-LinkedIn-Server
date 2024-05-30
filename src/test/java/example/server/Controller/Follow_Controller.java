@@ -11,6 +11,7 @@ public class Follow_Controller {
     private Follow_DataBase followDataBase;
     public void Follow_Controller(String follower, String followed) throws SQLException {
         this.follow = new Follow(follower,followed);
+        followDataBase = new Follow_DataBase();
         this.followDataBase.createFollowTable();
     }
     public void insertFollow() throws SQLException {
