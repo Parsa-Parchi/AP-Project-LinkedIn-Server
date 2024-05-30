@@ -2,10 +2,8 @@ package example.server.DataBase;
 
 import example.server.models.Education;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class Education_DataBase {
 
@@ -83,6 +81,118 @@ public class Education_DataBase {
         statement.executeUpdate();
 
     }
+
+    public ArrayList<Education> getAllEducations() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM education");
+        ResultSet resultSet = statement.executeQuery();
+
+        ArrayList<Education> educations = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String schoolName = resultSet.getString("school_name");
+            String field = resultSet.getString("field");
+            float grade = resultSet.getFloat("grade");
+            Date startDate = resultSet.getDate("start_date");
+            Date endDate = resultSet.getDate("end_date");
+            String community = resultSet.getString("community");
+            String description = resultSet.getString("description");
+            String email = resultSet.getString("email");
+            Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
+            educations.add(education);
+        }
+        return educations;
+    }
+
+    public ArrayList<Education> getAllEducationsOfUser(String email) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM education WHERE email = ?");
+        statement.setString(1, email);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Education> educations = new ArrayList<>();
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String schoolName = resultSet.getString("school_name");
+            String field = resultSet.getString("field");
+            float grade = resultSet.getFloat("grade");
+            Date startDate = resultSet.getDate("start_date");
+            Date endDate = resultSet.getDate("end_date");
+            String community = resultSet.getString("community");
+            String description = resultSet.getString("description");
+            Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
+            educations.add(education);
+        }
+        return educations;
+    }
+
+    public ArrayList<Education> getEducationOfField(String field) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM education WHERE field = ?");
+        statement.setString(1, field);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Education> educations = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String schoolName = resultSet.getString("school_name");
+            String email = resultSet.getString("email");
+            float grade = resultSet.getFloat("grade");
+            Date startDate = resultSet.getDate("start_date");
+            Date endDate = resultSet.getDate("end_date");
+            String community = resultSet.getString("community");
+            String description = resultSet.getString("description");
+            Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
+            educations.add(education);
+        }
+        return educations;
+
+    }
+
+    public ArrayList<Education> getEducationOfSchool(String schoolName) throws SQLException {
+
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM education WHERE school_name = ?");
+        statement.setString(1, schoolName);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Education> educations = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String email = resultSet.getString("email");
+            String field = resultSet.getString("field");
+            float grade = resultSet.getFloat("grade");
+            Date startDate = resultSet.getDate("start_date");
+            Date endDate = resultSet.getDate("end_date");
+            String community = resultSet.getString("community");
+            String description = resultSet.getString("description");
+            Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
+            educations.add(education);
+
+        }
+        return educations;
+
+    }
+
+    public ArrayList<Education> getEducationOfActivityCommunity(String Activity_Community) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM education WHERE Activity_Community = ?");
+        statement.setString(1, Activity_Community);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Education> educations = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String email = resultSet.getString("email");
+            String schoolName = resultSet.getString("school_name");
+            String field = resultSet.getString("field");
+            float grade = resultSet.getFloat("grade");
+            Date startDate = resultSet.getDate("start_date");
+            Date endDate = resultSet.getDate("end_date");
+            String community = resultSet.getString("community");
+            String description = resultSet.getString("description");
+            Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
+            educations.add(education);
+
+        }
+        return educations;
+
+    }
+
+
+
 
 
 
