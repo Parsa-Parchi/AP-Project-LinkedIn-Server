@@ -2,7 +2,10 @@ package example.server.DataBase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import example.server.models.Follow;
 
 public class Follow_DataBase {
@@ -58,13 +61,56 @@ public class Follow_DataBase {
 
     }
 
+    public void deleteFollowingOfUser(String followerEmail) throws SQLException{
+
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM follows WHERE follower = ?");
+        statement.setString(1, followerEmail);
+        statement.executeUpdate();
+    }
+
     public void deleteAllFollows() throws SQLException{
         PreparedStatement statement = connection.prepareStatement("DELETE FROM follows");
         statement.executeUpdate();
 
     }
 
+    public ArrayList<String> getFollowersOfUser(String email) throws SQLException{
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM follows WHERE followed = ?");
+        statement.setString(1, email);
+        ResultSet resultSet = statement.executeQuery();
 
+        ArrayList<String> followers = new ArrayList<>();
+        while(resultSet.next()){
+            followers.add(resultSet.getString("follower"));
 
+        }
+        return followers;
+
+    }
+
+    public ArrayList<String> getFollowingOfUser(String email) throws SQLException{
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM follows WHERE follower = ?");
+        statement.setString(1, email);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<String> following = new ArrayList<>();
+        while(resultSet.next()){
+            following.add(resultSet.getString("followed"));
+
+        }
+        return following;
+
+    }
+
+    public ArrayList<Follow> getAllFollows() throws SQLException{
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM follows");
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Follow> follows = new ArrayList<>();
+        while(resultSet.next()){
+            follows.add(new Follow(resultSet.getString("follower"),resultSet.getString("followed")));
+
+        }
+
+        return follows;
+    }
 
 }
