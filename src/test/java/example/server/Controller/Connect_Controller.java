@@ -62,5 +62,16 @@ public class Connect_Controller {
     public Connect getConnectionOfSenderAndReceiver(String sender, String receiver) throws SQLException {
         return this.connectDataBase.getConnectionOfSenderAndReceiver(sender, receiver);
     }
-
+    public Connect getConnectionOfSenderAndReceiver(String sender ,String receiver , boolean accepted) throws SQLException{
+        return this.connectDataBase.getConnectionOfSenderAndReceiver(sender,receiver,accepted);
+    }
+    public ArrayList<Connect> getAcceptedConnectionsOfSender(String sender ,boolean accepted) throws SQLException{
+        return this.connectDataBase.getAcceptedConnectionsOfSender(sender,accepted);
+    }
+    public ArrayList<Connect> getAcceptedConnectionsOfReceiver(String receiver ,boolean accepted) throws SQLException{
+        return this.connectDataBase.getAcceptedConnectionsOfReceiver(receiver,accepted);
+    }
+    public Connect getConn() {
+        return conn;
+    }
 }
