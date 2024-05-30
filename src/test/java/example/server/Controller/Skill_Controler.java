@@ -13,4 +13,22 @@ public class Skill_Controler {
         this.skillDataBase = new Skill_DataBase();
         skillDataBase.createSkillTable();
     }
+    public void insertSkill() throws SQLException {
+        this.skillDataBase.insertSkill(this.skill);
+    }
+    public void updateSkill() throws SQLException {
+        this.skillDataBase.updateSkill(this.skill);
+    }
+    public void deleteSkill() throws SQLException {
+        this.skillDataBase.deleteSkill(this.skill);
+    }
+    public void deleteSkillByEmail(String email) throws SQLException {
+        this.skillDataBase.deleteSkillByEmail(email);
+    }
+    public void deleteAllSkills() throws SQLException {
+        skillDataBase.deleteAllSkills();
+    }
+    public Skill getSkill() {
+        return skill;
+    }
 }
