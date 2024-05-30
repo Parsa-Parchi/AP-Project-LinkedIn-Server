@@ -59,6 +59,21 @@ public class Connect_DataBase {
 
     }
 
+    public void deleteConnectOfAccepted(boolean accepted) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM connections WHERE accepted = ?");
+        statement.setBoolean(1,accepted);
+        statement.executeUpdate();
+
+    }
+
+    public void deleteAllConnects() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM connections");
+        statement.executeUpdate();
+
+    }
+
+
+
 
 
 
