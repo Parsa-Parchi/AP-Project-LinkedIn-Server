@@ -1,8 +1,8 @@
 package example.server.DataBase;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Connection;
+import java.sql.*;
+import java.util.ArrayList;
+
 import example.server.models.Comment;
 
 public class Comment_DataBase {
@@ -69,6 +69,82 @@ public class Comment_DataBase {
         statement.executeUpdate();
 
     }
+
+    public ArrayList<Comment> getAllComments() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments");
+        ResultSet resultSet = statement.executeQuery();
+
+        ArrayList<Comment> comments = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            int postId = resultSet.getInt("post_id");
+            String email = resultSet.getString("email");
+            String comment = resultSet.getString("comment");
+            Timestamp commentDate = resultSet.getTimestamp("commentDate");
+            comments.add(new Comment(id,postId,email,commentDate,comment));
+
+        }
+        return comments;
+    }
+
+    public ArrayList<Comment> getCommentsOfPost(int postId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE post_id = ?");
+        statement.setInt(1, postId);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Comment> comments = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String email = resultSet.getString("email");
+            String comment = resultSet.getString("comment");
+            Timestamp commentDate = resultSet.getTimestamp("commentDate");
+            comments.add(new Comment(id,postId,email,commentDate,comment));
+
+        }
+        return comments;
+    }
+
+    public ArrayList<Comment> getCommentsOfUser(String email) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE email = ?");
+        statement.setString(1, email);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Comment> comments = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            int postId = resultSet.getInt("post_id");
+            String comment = resultSet.getString("comment");
+            Timestamp commentDate = resultSet.getTimestamp("commentDate");
+            comments.add(new Comment(id,postId,email,commentDate,comment));
+
+
+        }
+        return comments;
+
+    }
+    public ArrayList<Comment> getCommentsOfUserByPostId(String email,int postId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement( "SELECT * FROM comments WHERE post_id = ? AND email = ?");
+        statement.setInt(1, postId);
+        statement.setString(2, email);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<Comment> comments = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String comment = resultSet.getString("comment");
+            Timestamp commentDate = resultSet.getTimestamp("commentDate");
+            comments.add(new Comment(id,postId,email,commentDate,comment));
+        }
+        return comments;
+
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
