@@ -2,10 +2,8 @@ package example.server.DataBase;
 
 import example.server.models.ContactInformation;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Connection;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class ContactInformation_DataBase {
 
@@ -85,9 +83,52 @@ public class ContactInformation_DataBase {
 
     }
 
+    public ArrayList<ContactInformation> getAllContacts() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM contact");
+        ResultSet resultSet = statement.executeQuery();
 
+        ArrayList<ContactInformation> contacts = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String email = resultSet.getString("email");
+            String viewLink = resultSet.getString("view_link");
+            String mobile_PhoneNumber = resultSet.getString("Mobile_PhoneNumber");
+            String home_PhoneNumber = resultSet.getString("Home_PhoneNumber");
+            String workplace_PhoneNumber = resultSet.getString("Workplace_PhoneNumber");
+            String address = resultSet.getString("address");
+            Date birthDate = resultSet.getDate("birth_date");
+            String fastConnect = resultSet.getString("fast_connect");
+            String access_level = resultSet.getString("access_level");
 
+            ContactInformation contactInformation = new ContactInformation(id,email,viewLink,mobile_PhoneNumber
+            ,home_PhoneNumber,workplace_PhoneNumber,address,birthDate,fastConnect,access_level);
+            contacts.add(contactInformation);
 
+        }
+        return contacts;
+    }
 
+    public ArrayList<ContactInformation> getContactsOfUser(String email) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM contact WHERE email = ?");
+        statement.setString(1, email);
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<ContactInformation> contacts = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String viewLink = resultSet.getString("view_link");
+            String mobile_PhoneNumber = resultSet.getString("Mobile_PhoneNumber");
+            String home_PhoneNumber = resultSet.getString("Home_PhoneNumber");
+            String workplace_PhoneNumber = resultSet.getString("Workplace_PhoneNumber");
+            String address = resultSet.getString("address");
+            Date birthDate = resultSet.getDate("birth_date");
+            String fastConnect = resultSet.getString("fast_connect");
+            String access_level = resultSet.getString("access_level");
 
+            ContactInformation contactInformation = new ContactInformation(id,email,viewLink,mobile_PhoneNumber
+                    ,home_PhoneNumber,workplace_PhoneNumber,address,birthDate,fastConnect,access_level);
+            contacts.add(contactInformation);
+
+        }
+        return contacts;
+    }
 }
