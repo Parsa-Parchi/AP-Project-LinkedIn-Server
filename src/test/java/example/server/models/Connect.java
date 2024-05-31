@@ -5,17 +5,28 @@ public class Connect {
     private String Request_Sender;
     private String Request_Receiver;
     private boolean accepted;
+    private String notes;
 
-    public Connect(int id, String request_Sender, String request_Receiver, boolean accepted) {
+    public Connect(int id, String request_Sender, String request_Receiver, boolean accepted , String notes)  {
         this.id = id;
         Request_Sender = request_Sender;
         Request_Receiver = request_Receiver;
         this.accepted = accepted;
+        this.notes = notes;
     }
 
-    public Connect(String request_Sender, String request_Receiver) {
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Connect(String request_Sender, String request_Receiver , String notes) {
         Request_Sender = request_Sender;
         Request_Receiver = request_Receiver;
+        this.notes=notes;
     }
 
     public int getId() {

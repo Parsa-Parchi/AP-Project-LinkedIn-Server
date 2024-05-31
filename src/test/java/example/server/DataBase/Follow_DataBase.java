@@ -37,6 +37,13 @@ public class Follow_DataBase {
         statement.setString(2, follow.getFollowed());
         statement.executeUpdate();
 
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE users SET followers = followers + 1 WHERE email = ?");
+        statement1.setString(1, follow.getFollowed());
+        statement1.executeUpdate();
+
+        PreparedStatement statement2 = connection.prepareStatement("UPDATE users SET followings = followings + 1 WHERE email = ?");
+        statement2.setString(1, follow.getFollower());
+        statement2.executeUpdate();
     }
 
     public void deleteFollow(Follow follow) throws SQLException{
@@ -45,12 +52,38 @@ public class Follow_DataBase {
         statement.setString(2, follow.getFollowed());
         statement.executeUpdate();
 
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE users SET followers = followers - 1 WHERE email = ?");
+        statement1.setString(1, follow.getFollowed());
+        statement1.executeUpdate();
+
+        PreparedStatement statement2 = connection.prepareStatement("UPDATE users SET followings = followings - 1 WHERE email = ?");
+        statement2.setString(1, follow.getFollower());
+        statement2.executeUpdate();
+
     }
 
     public void deleteFollow(int id) throws SQLException{
-        PreparedStatement statement = connection.prepareStatement("DELETE FROM follows WHERE id = ?");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM follows WHERE id = ?");
         statement.setInt(1, id);
-        statement.executeUpdate();
+        ResultSet resultSet = statement.executeQuery();
+        String follower="",followed="";
+        if(resultSet.next()){
+             follower = resultSet.getString("follower");
+             followed = resultSet.getString("followed");
+        }
+
+
+        PreparedStatement statement1 = connection.prepareStatement("DELETE FROM follows WHERE id = ?");
+        statement1.setInt(1, id);
+        statement1.executeUpdate();
+
+        PreparedStatement statement2 = connection.prepareStatement("UPDATE users SET followers = followers - 1 WHERE email = ?");
+        statement2.setString(1,followed);
+        statement2.executeUpdate();
+
+        PreparedStatement statement3 = connection.prepareStatement("UPDATE users SET followings = followings - 1 WHERE email = ?");
+        statement3.setString(1,follower);
+        statement3.executeUpdate();
 
     }
 
@@ -59,6 +92,10 @@ public class Follow_DataBase {
         statement.setString(1, followedEmail);
         statement.executeUpdate();
 
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE users SET followers = 0 WHERE email = ?");
+        statement1.setString(1, followedEmail);
+        statement1.executeUpdate();
+
     }
 
     public void deleteFollowingOfUser(String followerEmail) throws SQLException{
@@ -66,11 +103,18 @@ public class Follow_DataBase {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM follows WHERE follower = ?");
         statement.setString(1, followerEmail);
         statement.executeUpdate();
+
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE users SET followings = 0 WHERE email = ?");
+        statement1.setString(1, followerEmail);
+        statement1.executeUpdate();
     }
 
     public void deleteAllFollows() throws SQLException{
         PreparedStatement statement = connection.prepareStatement("DELETE FROM follows");
         statement.executeUpdate();
+
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE users SET followers = 0 AND followed = 0");
+        statement1.executeUpdate();
 
     }
 

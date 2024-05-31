@@ -5,11 +5,13 @@ import example.server.models.Skill;
 
 import java.sql.SQLException;
 
-public class Skill_Controler {
+public class Skill_Controller {
 
     private Skill_DataBase skillDataBase;
 
-    public Skill_Controler() throws SQLException{
+
+
+    public Skill_Controller() throws SQLException{
 
         skillDataBase = new Skill_DataBase();
     }
@@ -36,5 +38,13 @@ public class Skill_Controler {
 
     public Skill getSkillOfUser(String Email) throws SQLException {
         return skillDataBase.getSkill(Email);
+    }
+
+    public Skill_DataBase getSkillDataBase() {
+        return skillDataBase;
+    }
+
+    public void setSkillDataBase(Skill_DataBase skillDataBase) {
+        this.skillDataBase = skillDataBase;
     }
 }

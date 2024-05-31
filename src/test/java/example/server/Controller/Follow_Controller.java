@@ -50,4 +50,11 @@ public class Follow_Controller {
         return this.followDataBase.getAllFollows();
     }
 
+    public Follow_DataBase getFollowDataBase() {
+        return followDataBase;
+    }
+
+    public void setFollowDataBase(Follow_DataBase followDataBase) {
+        this.followDataBase = followDataBase;
+    }
 }
