@@ -11,19 +11,6 @@ import java.sql.SQLException;
 
 public class UserController {
 
-//    private static User_DataBase user_dataBase ;
-//    private static Skill_DataBase skill_dataBase ;
-//    private static Education_DataBase education_dataBase ;
-//    private static ContactInformation_DataBase contactInformation_dataBase ;
-//
-//
-//    public UserController() throws SQLException {
-//        user_dataBase = new User_DataBase();
-//
-//    }
-
-
-
     public static boolean ValidUser(User user) throws SQLException {
         return ValidName(user.getFirstName()) && ValidName(user.getLastName())
                 && ValidEmail(user.getEmail()) && ValidPassword(user.getPassword());
