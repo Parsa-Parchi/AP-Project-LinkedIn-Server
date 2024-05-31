@@ -47,6 +47,15 @@ public class Connect_DataBase {
             PreparedStatement statement2 = connection.prepareStatement("UPDATE users SET connections = connections + 1 WHERE email = ?");
             statement2.setString(1,conn.getRequest_Sender());
             statement2.executeUpdate();
+
+            PreparedStatement statement3 = connection.prepareStatement("UPDATE users SET followers = followers + 1 AND followings = followings + 1 WHERE email = ?");
+            statement3.setString(1,conn.getRequest_Receiver());
+            statement3.executeUpdate();
+
+            PreparedStatement statement4 = connection.prepareStatement("UPDATE users SET followers = followers + 1 AND followings = followings + 1 WHERE email = ?");
+            statement4.setString(1,conn.getRequest_Receiver());
+            statement4.executeUpdate();
+
         }
     }
 
@@ -76,6 +85,15 @@ public class Connect_DataBase {
             PreparedStatement statement3 = connection.prepareStatement("UPDATE users SET connections = connections -1 WHERE email = ?");
             statement3.setString(1, receiver);
             statement3.executeUpdate();
+
+            PreparedStatement statement4 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement4.setString(1, sender);
+            statement4.executeUpdate();
+
+            PreparedStatement statement5 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement5.setString(1, receiver);
+            statement5.executeUpdate();
+
         }
 
     }
@@ -94,6 +112,14 @@ public class Connect_DataBase {
             PreparedStatement statement2 = connection.prepareStatement("UPDATE users SET connections = connections -1 WHERE email = ?");
             statement2.setString(1, conn.getRequest_Sender());
             statement2.executeUpdate();
+
+            PreparedStatement statement4 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement4.setString(1, conn.getRequest_Sender());
+            statement4.executeUpdate();
+
+            PreparedStatement statement5 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement5.setString(1,conn.getRequest_Receiver());
+            statement5.executeUpdate();
         }
     }
 
@@ -123,6 +149,14 @@ public class Connect_DataBase {
             PreparedStatement statement3 = connection.prepareStatement("UPDATE users SET connections = connections -1 WHERE email = ?");
             statement3.setString(1, receiver);
             statement3.executeUpdate();
+
+            PreparedStatement statement4 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement4.setString(1, sender);
+            statement4.executeUpdate();
+
+            PreparedStatement statement5 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement5.setString(1, receiver);
+            statement5.executeUpdate();
         }
     }
 
@@ -151,6 +185,14 @@ public class Connect_DataBase {
             PreparedStatement statement3 = connection.prepareStatement("UPDATE users SET connections = connections -1 WHERE email = ?");
             statement3.setString(1, receiver);
             statement3.executeUpdate();
+
+            PreparedStatement statement4 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement4.setString(1, sender);
+            statement4.executeUpdate();
+
+            PreparedStatement statement5 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement5.setString(1, receiver);
+            statement5.executeUpdate();
         }
     }
 
@@ -177,6 +219,14 @@ public class Connect_DataBase {
             PreparedStatement statement3 = connection.prepareStatement("UPDATE users SET connections = connections -1 WHERE email = ?");
             statement3.setString(1, sender);
             statement3.executeUpdate();
+
+            PreparedStatement statement4 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement4.setString(1, sender);
+            statement4.executeUpdate();
+
+            PreparedStatement statement5 = connection.prepareStatement("UPDATE users SET followers = followers -1 AND followings = followings -1 WHERE email = ?");
+            statement5.setString(1, receiver);
+            statement5.executeUpdate();
         }
 
     }
