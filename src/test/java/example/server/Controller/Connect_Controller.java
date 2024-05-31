@@ -22,6 +22,10 @@ public class Connect_Controller {
         this.connectDataBase.deleteConnect(id);
     }
 
+    public void deleteConnect(Connect conn) throws SQLException {
+        this.connectDataBase.deleteConnect(conn);
+    }
+
     public void deleteConnectOfSender(String sender) throws SQLException {
         this.connectDataBase.deleteConnectOfSender(sender);
     }

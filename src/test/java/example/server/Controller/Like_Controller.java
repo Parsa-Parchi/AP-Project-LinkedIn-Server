@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Like_Controller {
     private Like_DataBase likeDataBase;
+
     public Like_Controller() throws SQLException {
         likeDataBase = new Like_DataBase();
     }
