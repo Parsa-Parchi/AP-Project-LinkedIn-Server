@@ -21,14 +21,14 @@ public class Education_Controller {
         if(isValid(education))
             this.educationDataBase.insertEducation(education);
         else
-            throw new IllegalArgumentException("Invalid education");
+            throw new IllegalArgumentException("Invalid education ! : school name or field is empty");
     }
 
     public void updateEducation(Education education) throws SQLException {
         if(isValid(education))
             this.educationDataBase.updateEducation(education);
         else
-            throw new IllegalArgumentException("Invalid education");
+            throw new IllegalArgumentException("Invalid education ! : school name or field is empty");
     }
 
     public void deleteEducation(int id) throws SQLException {

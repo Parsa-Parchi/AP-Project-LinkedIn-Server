@@ -20,14 +20,14 @@ public class ContactInfo_Controller {
         if(isValid(contactInformation))
             this.contact_info_db.insertContact(contactInformation);
         else
-            throw new IllegalArgumentException("Contact information is not valid");
+            throw new IllegalArgumentException("Contact information is not valid : view link is null or phone number is not valid ");
     }
 
     public void updateContactInfo(ContactInformation contactInformation) throws SQLException {
         if(isValid(contactInformation))
             this.contact_info_db.updateContact(contactInformation);
         else
-            throw new IllegalArgumentException("Contact information is not valid");
+            throw new IllegalArgumentException("Contact information is not valid : view link is null or phone number is not valid " );
 
     }
 

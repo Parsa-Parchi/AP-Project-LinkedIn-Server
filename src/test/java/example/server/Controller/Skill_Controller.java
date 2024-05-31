@@ -9,13 +9,7 @@ public class Skill_Controller {
 
     private Skill_DataBase skillDataBase;
 
-    public Skill_DataBase getSkillDataBase() {
-        return skillDataBase;
-    }
 
-    public void setSkillDataBase(Skill_DataBase skillDataBase) {
-        this.skillDataBase = skillDataBase;
-    }
 
     public Skill_Controller() throws SQLException{
 
@@ -44,5 +38,13 @@ public class Skill_Controller {
 
     public Skill getSkillOfUser(String Email) throws SQLException {
         return skillDataBase.getSkill(Email);
+    }
+
+    public Skill_DataBase getSkillDataBase() {
+        return skillDataBase;
+    }
+
+    public void setSkillDataBase(Skill_DataBase skillDataBase) {
+        this.skillDataBase = skillDataBase;
     }
 }
