@@ -33,6 +33,10 @@ public class Comment_DataBase {
         statement.setString(2, comment.getEmail());
         statement.setString(3,comment.getComment());
         statement.executeUpdate();
+
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE posts SET comments = comments + 1 WHERE id = ?");
+        statement1.setInt(1, comment.getPostId());
+        statement1.executeUpdate();
     }
 
     public void updateComment(Comment comment) throws SQLException {
@@ -43,16 +47,39 @@ public class Comment_DataBase {
     }
 
     public void deleteComment(int id) throws SQLException {
+        PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM comments WHERE id = ?");
+        statement1.setInt(1, id);
+        ResultSet resultSet = statement1.executeQuery();
+        int postId = 0;
+        if (resultSet.next()) {
+            postId = resultSet.getInt("id");
+        }
+
         PreparedStatement statement = connection.prepareStatement("DELETE FROM comments WHERE id = ?");
         statement.setInt(1, id);
         statement.executeUpdate();
 
+        PreparedStatement statement2 = connection.prepareStatement("UPDATE posts SET comments = comments - 1 WHERE id = ?");
+        statement2.setInt(1, postId);
+        statement2.executeUpdate();
+    }
+
+    public void deleteComment(Comment comment) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM comments WHERE id = ?");
+        statement.setInt(1, comment.getId());
+        statement.executeUpdate();
+
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE posts SET comments = comments - 1 WHERE id = ?");
+        statement1.setInt(1, comment.getPostId());
+        statement1.executeUpdate();
     }
 
     public void deleteAllComments() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM comments");
         statement.executeUpdate();
 
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE posts SET comments = 0 ");
+        statement1.executeUpdate();
 
     }
 
@@ -61,13 +88,28 @@ public class Comment_DataBase {
         statement.setInt(1, postId);
         statement.executeUpdate();
 
+        PreparedStatement statement1 = connection.prepareStatement("UPDATE posts SET comments = comments - 1 WHERE id = ?");
+        statement1.setInt(1, postId);
+        statement1.executeUpdate();
     }
 
     public void deleteCommentByUser(String email) throws SQLException {
+        PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM comments WHERE email = ?");
+        statement1.setString(1, email);
+        ResultSet resultSet = statement1.executeQuery();
+        int postId = 0;
+        if (resultSet.next()) {
+            postId = resultSet.getInt("id");
+
+        }
+
         PreparedStatement statement = connection.prepareStatement("DELETE FROM comments WHERE email = ?");
         statement.setString(1, email);
         statement.executeUpdate();
 
+        PreparedStatement statement2 = connection.prepareStatement("UPDATE posts SET comments = comments - 1 WHERE id = ?");
+        statement2.setInt(1, postId);
+        statement2.executeUpdate();
     }
 
     public ArrayList<Comment> getAllComments() throws SQLException {

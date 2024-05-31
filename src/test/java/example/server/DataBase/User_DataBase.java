@@ -73,12 +73,16 @@ public class User_DataBase {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
         statement.setInt(1, id);
         statement.executeUpdate();
+
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM skills WHERE email = ?");
+
     }
 
     public void deleteUserByEmail(User user) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE email = ?");
         preparedStatement.setString(1, user.getEmail());
         preparedStatement.executeUpdate();
+
     }
 
     public void deleteAllUsers() throws SQLException {
