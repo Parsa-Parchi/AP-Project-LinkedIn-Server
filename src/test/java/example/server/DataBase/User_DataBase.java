@@ -69,10 +69,16 @@ public class User_DataBase {
 
     }
 
-    public void deleteUser(int id) throws SQLException {
+    public void deleteUserById(int id) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?");
         statement.setInt(1, id);
         statement.executeUpdate();
+    }
+
+    public void deleteUserByEmail(User user) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE email = ?");
+        preparedStatement.setString(1, user.getEmail());
+        preparedStatement.executeUpdate();
     }
 
     public void deleteAllUsers() throws SQLException {
@@ -80,13 +86,39 @@ public class User_DataBase {
         statement.executeUpdate();
     }
 
-    public User getUsers(String email) throws SQLException {
+    public User getUserByEmail(String email) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
         statement.setString(1, email);
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
             int id = resultSet.getInt("id");
+            String password = resultSet.getString("password");
+            String firstName = resultSet.getString("name");
+            String lastName = resultSet.getString("lastName");
+            String additionalName = resultSet.getString("additionalName");
+            String avatarUrl = resultSet.getString("avatar_url");
+            String backgroundUrl = resultSet.getString("background_url");
+            String headline = resultSet.getString("headline");
+            String country = resultSet.getString("country");
+            String city = resultSet.getString("city");
+            int followers = resultSet.getInt("followers");
+            int followings = resultSet.getInt("followings");
+            int connections = resultSet.getInt("connections");
+
+            return new User(id, email, password, firstName, lastName, additionalName, avatarUrl,
+                    backgroundUrl, headline, country, city, followers, followings, connections);
+        }
+
+        return null;
+
+    }
+
+    public User getUserById(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
             String userEmail = resultSet.getString("email");
             String password = resultSet.getString("password");
             String firstName = resultSet.getString("name");
@@ -104,10 +136,9 @@ public class User_DataBase {
             return new User(id, userEmail, password, firstName, lastName, additionalName, avatarUrl,
                     backgroundUrl, headline, country, city, followers, followings, connections);
         }
-
         return null;
-
     }
+
 
     public ArrayList<User> getAllUsers() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");

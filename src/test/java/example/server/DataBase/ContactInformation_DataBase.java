@@ -83,7 +83,7 @@ public class ContactInformation_DataBase {
 
     }
 
-    public ArrayList<ContactInformation> getAllContacts() throws SQLException {
+    public ArrayList<ContactInformation> getAllContactInfo() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM contact");
         ResultSet resultSet = statement.executeQuery();
 
@@ -108,12 +108,11 @@ public class ContactInformation_DataBase {
         return contacts;
     }
 
-    public ArrayList<ContactInformation> getContactsOfUser(String email) throws SQLException {
+    public ContactInformation getContactInfoOfUser(String email) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM contact WHERE email = ?");
         statement.setString(1, email);
         ResultSet resultSet = statement.executeQuery();
-        ArrayList<ContactInformation> contacts = new ArrayList<>();
-        while (resultSet.next()) {
+        if(resultSet.next()) {
             int id = resultSet.getInt("id");
             String viewLink = resultSet.getString("view_link");
             String mobile_PhoneNumber = resultSet.getString("Mobile_PhoneNumber");
@@ -124,11 +123,30 @@ public class ContactInformation_DataBase {
             String fastConnect = resultSet.getString("fast_connect");
             String access_level = resultSet.getString("access_level");
 
-            ContactInformation contactInformation = new ContactInformation(id,email,viewLink,mobile_PhoneNumber
+          return new ContactInformation(id,email,viewLink,mobile_PhoneNumber
                     ,home_PhoneNumber,workplace_PhoneNumber,address,birthDate,fastConnect,access_level);
-            contacts.add(contactInformation);
-
         }
-        return contacts;
+       return null;
+    }
+
+    public ContactInformation getContactInfoById(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM contact WHERE id = ?");
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        if(resultSet.next()) {
+            String email = resultSet.getString("email");
+            String viewLink = resultSet.getString("view_link");
+            String mobile_PhoneNumber = resultSet.getString("Mobile_PhoneNumber");
+            String home_PhoneNumber = resultSet.getString("Home_PhoneNumber");
+            String workplace_PhoneNumber = resultSet.getString("Workplace_PhoneNumber");
+            String address = resultSet.getString("address");
+            Date birthDate = resultSet.getDate("birth_date");
+            String fastConnect = resultSet.getString("fast_connect");
+            String access_level = resultSet.getString("access_level");
+
+            return new ContactInformation(id,email,viewLink,mobile_PhoneNumber
+                    ,home_PhoneNumber,workplace_PhoneNumber,address,birthDate,fastConnect,access_level);
+        }
+        return null;
     }
 }

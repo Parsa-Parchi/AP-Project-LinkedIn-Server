@@ -18,11 +18,17 @@ public class Education_Controller {
     }
 
     public void insertEducation(Education education) throws SQLException {
-        this.educationDataBase.insertEducation(education);
+        if(isValid(education))
+            this.educationDataBase.insertEducation(education);
+        else
+            throw new IllegalArgumentException("Invalid education");
     }
 
     public void updateEducation(Education education) throws SQLException {
-        this.educationDataBase.updateEducation(education);
+        if(isValid(education))
+            this.educationDataBase.updateEducation(education);
+        else
+            throw new IllegalArgumentException("Invalid education");
     }
 
     public void deleteEducation(int id) throws SQLException {
@@ -53,8 +59,28 @@ public class Education_Controller {
         return this.educationDataBase.getEducationOfSchool(school);
     }
 
+    public Education_DataBase getEducationDataBase() {
+        return educationDataBase;
+    }
+
+    public void setEducationDataBase(Education_DataBase educationDataBase) {
+        this.educationDataBase = educationDataBase;
+    }
+
     public ArrayList<Education> getEducationOfActivityCommunity(String Activity_Community) throws SQLException {
         return this.educationDataBase.getEducationOfActivityCommunity(Activity_Community);
+    }
+
+    public static boolean schoolNameValidator(String schoolName) {
+        return schoolName != null;
+    }
+
+    public static boolean fieldValidator(String field) {
+        return field != null;
+    }
+
+    public static boolean isValid(Education education) {
+        return schoolNameValidator(education.getSchoolName()) && fieldValidator(education.getField());
     }
 
 }

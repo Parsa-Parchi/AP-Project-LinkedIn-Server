@@ -15,7 +15,7 @@ public class ContactInformation {
     private String access_level;
 
 
-    public ContactInformation(String email, String viewLink, String mobile_PhoneNumber) {
+    public ContactInformation(String email, String viewLink, String mobile_PhoneNumber,String home_PhoneNumber, String workplace_PhoneNumber) {
         this.email = email;
         this.viewLink = viewLink;
         Mobile_PhoneNumber = mobile_PhoneNumber;
