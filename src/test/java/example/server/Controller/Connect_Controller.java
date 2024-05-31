@@ -7,24 +7,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Connect_Controller {
-    private Connect conn;
+
     private Connect_DataBase connectDataBase;
 
-    public void Connect_Controller(int id, String request_Sender, String request_Receiver, boolean accepted) throws SQLException {
-        this.conn = new Connect(id, request_Sender, request_Receiver, accepted);
-        this.connectDataBase = new Connect_DataBase();
+    public Connect_Controller() throws SQLException{
+        connectDataBase = new Connect_DataBase();
     }
 
-    public void insertConnect() throws SQLException {
-        this.connectDataBase.insertConnect(this.conn);
+    public void insertConnect(Connect conn) throws SQLException {
+        this.connectDataBase.insertConnect(conn);
     }
 
     public void deleteConnect(int id) throws SQLException {
         this.connectDataBase.deleteConnect(id);
-    }
-
-    public void deleteConnect(Connect conn) throws SQLException {
-        this.connectDataBase.deleteConnect(conn);
     }
 
     public void deleteConnectOfSender(String sender) throws SQLException {
@@ -71,7 +66,5 @@ public class Connect_Controller {
     public ArrayList<Connect> getAcceptedConnectionsOfReceiver(String receiver ,boolean accepted) throws SQLException{
         return this.connectDataBase.getAcceptedConnectionsOfReceiver(receiver,accepted);
     }
-    public Connect getConn() {
-        return conn;
-    }
+
 }

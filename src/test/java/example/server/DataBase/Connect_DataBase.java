@@ -43,12 +43,7 @@ public class Connect_DataBase {
         statement.executeUpdate();
     }
 
-    public void deleteConnect(Connect conn) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("DELETE FROM connections WHERE id = ?");
-        statement.setInt(1,conn.getId());
-        statement.executeUpdate();
 
-    }
     public void deleteConnectOfSender(String sender) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("DELETE FROM connections WHERE Request_Sender = ?");
         statement.setString(1,sender);
