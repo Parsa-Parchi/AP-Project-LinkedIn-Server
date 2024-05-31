@@ -21,6 +21,7 @@ public class Connect_DataBase {
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
                 + "Request_Sender VARCHAR(255) NOT NULL,"
                 + "Request_Receiver VARCHAR(255) NOT NULL,"
+                + "notes VARCHAR(500) NOT NULL,"
                 + "accepted BOOLEAN DEFAULT FALSE,"
                 + "FOREIGN KEY (Request_Sender) REFERENCES users(email) ON DELETE CASCADE,"
                 + "FOREIGN KEY (accepted BOOLEAN) REFERENCES users(email) ON DELETE CASCADE"
@@ -30,10 +31,11 @@ public class Connect_DataBase {
     }
 
     public void insertConnect(Connect conn) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO connections(Request_Sender, Request_Receiver) VALUES (?, ?)");
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO connections(Request_Sender, Request_Receiver , notes) VALUES (?, ?, ?)");
 
         statement.setString(1,conn.getRequest_Receiver());
         statement.setString(2,conn.getRequest_Sender());
+        statement.setString(3,conn.getNotes());
         statement.executeUpdate();
 
         if(conn.isAccepted())
@@ -193,7 +195,7 @@ public class Connect_DataBase {
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Connect> connects = new ArrayList<>();
         while (resultSet.next()) {
-            Connect connect = new Connect(resultSet.getString("Request_Sender"),resultSet.getString("Request_Receiver"));
+            Connect connect = new Connect(resultSet.getString("Request_Sender"),resultSet.getString("Request_Receiver"),resultSet.getString("notes"));
             connects.add(connect);
 
         }
@@ -207,7 +209,7 @@ public class Connect_DataBase {
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Connect> connects = new ArrayList<>();
         while (resultSet.next()) {
-            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"));
+            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
             connects.add(connect);
 
         }
@@ -220,7 +222,7 @@ public class Connect_DataBase {
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Connect> connects = new ArrayList<>();
         while (resultSet.next()) {
-            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"));
+            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
             connects.add(connect);
 
         }
@@ -234,7 +236,7 @@ public class Connect_DataBase {
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Connect> connects = new ArrayList<>();
         while (resultSet.next()) {
-            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"));
+            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
             connects.add(connect);
 
         }
@@ -246,7 +248,7 @@ public class Connect_DataBase {
         statement.setString(1,sender);
         statement.setString(2,receiver);
         ResultSet resultSet = statement.executeQuery();
-        Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"));
+        Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
         return connect;
     }
 
@@ -256,7 +258,7 @@ public class Connect_DataBase {
         statement.setString(2,receiver);
         statement.setBoolean(3,accepted);
         ResultSet resultSet = statement.executeQuery();
-        Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"));
+        Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
         return connect;
 
     }
@@ -268,7 +270,7 @@ public class Connect_DataBase {
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Connect> connects = new ArrayList<>();
         while (resultSet.next()) {
-            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"));
+            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
             connects.add(connect);
 
         }
@@ -280,7 +282,7 @@ public class Connect_DataBase {
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Connect> connects = new ArrayList<>();
         while (resultSet.next()) {
-            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"));
+            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
             connects.add(connect);
         }
         return connects;
