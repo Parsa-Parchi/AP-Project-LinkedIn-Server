@@ -132,7 +132,6 @@ public class User {
         this.city = city;
     }
 
-
     public int getFollowers() {
         return followers;
     }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class ContactInfo_Controller {
-    private ContactInformation_DataBase contact_info_db;
+    private ContactInformation_DataBase contact_info_db ;
     private static final Pattern NUMBER_FORMAT = Pattern.compile("^\\+?[0-9. ()-]{7,15}$");
 
 
@@ -16,11 +16,16 @@ public class ContactInfo_Controller {
         contact_info_db = new ContactInformation_DataBase();
     }
 
+    public ContactInformation_DataBase get_contact_info_db() {
+        return contact_info_db;
+    }
+
+    public void setContact_info_db(ContactInformation_DataBase contact_info_db) {
+        this.contact_info_db = contact_info_db;
+    }
+
     public void insertContactInfo(ContactInformation contactInformation) throws SQLException {
-        if(isValid(contactInformation))
             this.contact_info_db.insertContact(contactInformation);
-        else
-            throw new IllegalArgumentException("Contact information is not valid : view link is null or phone number is not valid ");
     }
 
     public void updateContactInfo(ContactInformation contactInformation) throws SQLException {
