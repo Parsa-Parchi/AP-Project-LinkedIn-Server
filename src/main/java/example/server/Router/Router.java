@@ -7,6 +7,7 @@ public class Router {
 
     public static void addRoute(Server server) {
         server.post("/signup", UserHandler::SignUpHandler);
+
     }
 
 }
