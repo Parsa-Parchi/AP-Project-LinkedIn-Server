@@ -98,7 +98,7 @@ public class User_DataBase {
         if (resultSet.next()) {
             int id = resultSet.getInt("id");
             String password = resultSet.getString("password");
-            String firstName = resultSet.getString("name");
+            String firstName = resultSet.getString("firstname");
             String lastName = resultSet.getString("lastName");
             String additionalName = resultSet.getString("additionalName");
             String avatarUrl = resultSet.getString("avatar_url");
@@ -116,6 +116,7 @@ public class User_DataBase {
 
         return null;
 
+
     }
 
     public User getUserById(int id) throws SQLException {
@@ -125,7 +126,7 @@ public class User_DataBase {
         if (resultSet.next()) {
             String userEmail = resultSet.getString("email");
             String password = resultSet.getString("password");
-            String firstName = resultSet.getString("name");
+            String firstName = resultSet.getString("firstname");
             String lastName = resultSet.getString("lastName");
             String additionalName = resultSet.getString("additionalName");
             String avatarUrl = resultSet.getString("avatar_url");
@@ -153,7 +154,7 @@ public class User_DataBase {
             int id = resultSet.getInt("id");
             String userEmail = resultSet.getString("email");
             String password = resultSet.getString("password");
-            String firstName = resultSet.getString("name");
+            String firstName = resultSet.getString("firstname");
             String lastName = resultSet.getString("lastName");
             String additionalName = resultSet.getString("additionalName");
             String avatarUrl = resultSet.getString("avatar_url");

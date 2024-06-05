@@ -4,6 +4,7 @@ import example.server.DataBase.User_DataBase;
 import example.server.models.User;
 import example.server.Utilities.jwt_Util;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class Authentication_Controller {
     public static String LogIn(String email, String password) throws Exception
     {
         User user = user_dataBase.getUserByEmail(email);
-        if (user != null && user.getPassword().equals(hashPassword(password))) {
+        if (user!=null && user.getPassword().equals(decodeBase64(password))) {
             return jwt_Util.generateToken(email);
         }
         else
@@ -35,9 +36,11 @@ public class Authentication_Controller {
 
 
 
-    private static String hashPassword(String password) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hash = md.digest(password.getBytes());
-        return Base64.getEncoder().encodeToString(hash);
+    public static String decodeBase64(String base64EncodedString) {
+        // Decode the Base64 encoded string
+        byte[] decodedBytes = Base64.getDecoder().decode(base64EncodedString);
+        // Convert the decoded bytes back to a string
+        return new String(decodedBytes);
     }
+
 }
