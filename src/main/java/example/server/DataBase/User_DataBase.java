@@ -36,7 +36,7 @@ public class User_DataBase {
     }
 
     public void insertUser(User user) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (email, password, name, lastName, additionalName, avatar_url, background_url, headline, country, city)"
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (email, password, firstname, lastName, additionalName, avatar_url, background_url, headline, country, city)"
                 + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         preparedStatement.setString(1, user.getEmail());

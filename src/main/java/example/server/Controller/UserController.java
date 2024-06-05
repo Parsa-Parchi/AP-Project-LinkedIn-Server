@@ -14,34 +14,39 @@ import java.util.ArrayList;
 
 public class UserController {
 
-    private User_DataBase user_db;
-    private Education_Controller education_controller;
-    private Skill_Controller skill_controler;
-    private ContactInfo_Controller contact_info_controller;
+    private  static User_DataBase user_db  ;
+    private static Education_Controller education_controller;
+    private static Skill_Controller skill_controler;
+    private  static ContactInfo_Controller contact_info_controller;
 
-    public UserController() throws SQLException {
-        user_db = new User_DataBase();
-        education_controller = new Education_Controller();
-        skill_controler = new Skill_Controller();
-        contact_info_controller = new ContactInfo_Controller();
+    static {
+        try{
+
+            user_db = new User_DataBase();
+            education_controller = new Education_Controller();
+            skill_controler = new Skill_Controller();
+            contact_info_controller = new ContactInfo_Controller();
+        }
+        catch(SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void insertUser(User user) throws SQLException {
+    public static void insertUser(User user) throws SQLException {
         boolean ValidationOfUser = ValidUser(user);
         if(ValidationOfUser){
             user_db.insertUser(user);
             skill_controler.getSkillDataBase().insertSkill(new Skill("","","","","",user.getEmail()));
             education_controller.getEducationDataBase().insertEducation(new Education(user.getEmail(),"","",0.0,null));
-            skill_controler.getSkillDataBase().insertSkill(new Skill("","","","","",user.getEmail()));
             contact_info_controller.insertContactInfo(new ContactInformation(user.getEmail(),"","","",""));
-
         }
 
         else
             throw new IllegalArgumentException("Invalid data for user !");
     }
 
-    public void updateUser(User user) throws SQLException {
+    public static void updateUser(User user) throws SQLException {
         boolean ValidationOfUser = ValidUser(user);
         if(ValidationOfUser){
             user_db.updateUser(user);
@@ -50,27 +55,27 @@ public class UserController {
             throw new IllegalArgumentException("Invalid data for user !");
     }
 
-    public void deleteUserByEmail(User user) throws SQLException {
+    public static void deleteUserByEmail(User user) throws SQLException {
         user_db.deleteUserByEmail(user);
     }
 
-    public void deleteUserById(int id) throws SQLException {
+    public static void deleteUserById(int id) throws SQLException {
         user_db.deleteUserById(id);
     }
-    public void deleteAllUsers() throws SQLException {
+    public static void deleteAllUsers() throws SQLException {
         user_db.deleteAllUsers();
 
     }
 
-    public User getUserById(int id) throws SQLException {
+    public static User getUserById(int id) throws SQLException {
        return user_db.getUserById(id);
     }
 
-    public User getUserByEmail(String email) throws SQLException {
+    public static User getUserByEmail(String email) throws SQLException {
         return user_db.getUserByEmail(email);
     }
 
-    public ArrayList<User> getAllUsers() throws SQLException {
+    public static ArrayList<User> getAllUsers() throws SQLException {
             return user_db.getAllUsers();
     }
 

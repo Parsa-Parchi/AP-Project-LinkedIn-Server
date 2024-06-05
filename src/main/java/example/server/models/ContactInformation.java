@@ -19,6 +19,8 @@ public class ContactInformation {
         this.email = email;
         this.viewLink = viewLink;
         Mobile_PhoneNumber = mobile_PhoneNumber;
+        Home_PhoneNumber = home_PhoneNumber;
+        Workplace_PhoneNumber = workplace_PhoneNumber;
     }
 
     public ContactInformation(int id, String email, String viewLink, String mobile_PhoneNumber, String home_PhoneNumber, String workplace_PhoneNumber, String address, Date birthDate, String fastConnect, String access_level) {

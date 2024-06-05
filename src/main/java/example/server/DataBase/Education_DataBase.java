@@ -20,7 +20,7 @@ public class Education_DataBase {
                 + "school_name VARCHAR(40) NOT NULL,"
                 + "field VARCHAR(40) NOT NULL,"
                 + "grade FLOAT NOT NULL,"
-                + "start_date DATE NOT NULL,"
+                + "start_date DATE,"
                 + "end_date DATE,"
                 + "Activity_Community VARCHAR(500),"
                 + "description VARCHAR(1000),"
