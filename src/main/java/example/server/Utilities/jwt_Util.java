@@ -1,4 +1,4 @@
-package com.example.server.util.jwt;
+package example.server.Utilities;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -11,10 +11,10 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JWT_Util {
+public class jwt_Util {
 
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private static final Logger LOGGER = Logger.getLogger(JWT_Util.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(jwt_Util.class.getName());
     private static final long EXPIRATION_TIME = 3600000; // 1 hour
 
 
