@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Authentication_Handler {
     private static final Gson gson = new Gson();
 
-    public static void loginHandler(HttpExchange exchange) throws IOException {
+    public static void LogInHandler(HttpExchange exchange) throws IOException {
         try {
 
             String reqBody = new String(exchange.getRequestBody().readAllBytes());
