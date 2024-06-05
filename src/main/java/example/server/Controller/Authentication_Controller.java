@@ -28,7 +28,8 @@ public class Authentication_Controller {
         if (user != null && user.getPassword().equals(hashPassword(password))) {
             return jwt_Util.generateToken(email);
         }
-        return null;
+        else
+            throw new IllegalArgumentException("Invalid email or password");
     }
 
 
