@@ -10,6 +10,7 @@ public class Router {
 
         server.post("/signup", UserHandler::SignUpHandler);
         server.post("/login", Authentication_Handler::LogInHandler);
+        server.get("/user",UserHandler::retrieveUserHandler);
 
     }
 

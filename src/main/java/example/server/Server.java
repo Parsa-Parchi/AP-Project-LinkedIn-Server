@@ -117,9 +117,6 @@ public class Server  {
         sendResponse(exchange, 405, "Method Not Allowed");
     }
 
-    public static String emailOfPath(String path) {
-        String[] segments = path.split("/");
-        return segments[segments.length - 1];
-    }
+
 
 }
