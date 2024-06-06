@@ -16,13 +16,14 @@ public class Router {
         server.get("/user/skill",UserHandler::getSkillOfUserHandler);
         server.get("/user/contact-info",UserHandler::getContactInfoOfUserHandler);
         server.get("/user/educations",UserHandler::getEducationsOfUserHandler);
-        server.get("/profile", ProfileHandler::retrieveProfileOfUserHandler);
+        server.get("/profile", ProfileHandler::retrieveProfileHandler);
         server.put("/profile/update/user", ProfileHandler::updateUserProfileHandler);
         server.put("/profile/update/skill", ProfileHandler::updateSkillProfileHandler);
         server.put("/profile/update/contact-info", ProfileHandler::updateContactInfoHandler);
         server.put("/profile/update/education", ProfileHandler::educationUpdateHandler);
         server.post("/profile/add/education", ProfileHandler::addEducationHandler);
         server.get("/search", Search_Handler::searchByString);
+        server.get("/user/profile", ProfileHandler::retrieveAnotherProfileHandler);
 
 
 
