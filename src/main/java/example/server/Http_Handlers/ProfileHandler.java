@@ -112,8 +112,10 @@ public class ProfileHandler {
             return;
         }
 
+        String EmailOfToken = jwt_Util.parseToken(token);
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         Skill skill = gson.fromJson(requestBody, Skill.class);
+        skill.setEmail(EmailOfToken);
 
         try {
             Profile_Controller.updateSkill(skill);
@@ -137,8 +139,11 @@ public class ProfileHandler {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
             return;
         }
+
+        String EmailOfToken = jwt_Util.parseToken(token);
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         ContactInformation contactInformation = gson.fromJson(requestBody, ContactInformation.class);
+        contactInformation.setEmail(EmailOfToken);
 
         try {
             ContactInfo_Controller.updateContactInfo(contactInformation);
@@ -165,8 +170,11 @@ public class ProfileHandler {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
             return;
         }
+
+        String EmailOfToken = jwt_Util.parseToken(token);
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         Education education = gson.fromJson(requestBody, Education.class);
+        education.setEmail(EmailOfToken);
 
         try {
             Education_Controller.updateEducation(education);
@@ -194,8 +202,10 @@ public class ProfileHandler {
             return;
         }
 
+        String EmailOfToken = jwt_Util.parseToken(token);
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         Education education = gson.fromJson(requestBody, Education.class);
+        education.setEmail(EmailOfToken);
 
         try {
             Profile_Controller.addEducation(education);
