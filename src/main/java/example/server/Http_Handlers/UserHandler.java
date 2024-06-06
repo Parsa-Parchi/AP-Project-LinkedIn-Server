@@ -52,7 +52,7 @@ public class UserHandler {
         String token = Authorization_Util.getAuthToken(exchange);
 
         if (token == null) {
-            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing or invalid")));
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing")));
             return;
         }
 
@@ -83,7 +83,7 @@ public class UserHandler {
     public static void retrieveAllUserHandler(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
-            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing or invalid")));
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
             return;
         }
 
@@ -107,7 +107,7 @@ public class UserHandler {
     public static void getSkillOfUserHandler(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
-            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing or invalid")));
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
             return;
         }
 
@@ -136,7 +136,7 @@ public class UserHandler {
     public static void getContactInfoOfUserHandler(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
-            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing or invalid")));
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
             return;
         }
 
@@ -164,7 +164,7 @@ public class UserHandler {
     public static void getEducationsOfUserHandler(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
-            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing or invalid")));
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
             return;
         }
 

@@ -1,6 +1,7 @@
 package example.server.Router;
 
 import example.server.Http_Handlers.Authentication_Handler;
+import example.server.Http_Handlers.ProfileHandler;
 import example.server.Http_Handlers.UserHandler;
 import example.server.Server;
 
@@ -15,6 +16,7 @@ public class Router {
         server.get("/user/skill",UserHandler::getSkillOfUserHandler);
         server.get("/user/contact-info",UserHandler::getContactInfoOfUserHandler);
         server.get("/user/educations",UserHandler::getEducationsOfUserHandler);
+        server.get("/profile", ProfileHandler::retrieveProfileOfUserHandler);
 
     }
 
