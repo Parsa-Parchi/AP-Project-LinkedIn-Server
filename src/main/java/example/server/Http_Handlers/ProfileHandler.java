@@ -182,4 +182,34 @@ public class ProfileHandler {
             Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
         }
     }
+
+    public static void addEducationHandler(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        }
+        else if(!Authorization_Util.validateAuthToken(exchange,token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        Education education = gson.fromJson(requestBody, Education.class);
+
+        try {
+            Profile_Controller.addEducation(education);
+            Server.sendResponse(exchange, 200, "Profile updated successfully");
+        }
+        catch (IllegalArgumentException e){
+            Server.sendResponse(exchange, 400,"Bad Request : " + e.getMessage());
+        }
+        catch (SQLException e) {
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        }
+        catch (Exception e) {
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+    }
+
 }
