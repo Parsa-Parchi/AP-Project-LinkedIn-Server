@@ -20,6 +20,7 @@ public class Router {
         server.put("/profile/update/user", ProfileHandler::updateUserProfileHandler);
         server.put("/profile/update/skill", ProfileHandler::updateSkillProfileHandler);
         server.put("/profile/update/contact-info", ProfileHandler::updateContactInfoHandler);
+        server.put("/profile/update/education", ProfileHandler::educationUpdateHandler);
 
     }
 
