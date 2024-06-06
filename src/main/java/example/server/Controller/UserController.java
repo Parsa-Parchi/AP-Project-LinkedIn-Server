@@ -13,19 +13,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserController {
-
     private  static User_DataBase user_db  ;
-    private static Education_Controller education_controller;
-    private static Skill_Controller skill_controler;
-    private  static ContactInfo_Controller contact_info_controller;
 
     static {
         try{
-
             user_db = new User_DataBase();
-            education_controller = new Education_Controller();
-            skill_controler = new Skill_Controller();
-            contact_info_controller = new ContactInfo_Controller();
         }
         catch(SQLException e)
         {
@@ -37,9 +29,9 @@ public class UserController {
         boolean ValidationOfUser = ValidUser(user);
         if(ValidationOfUser){
             user_db.insertUser(user);
-            skill_controler.getSkillDataBase().insertSkill(new Skill("","","","","",user.getEmail()));
-            education_controller.getEducationDataBase().insertEducation(new Education(user.getEmail(),"","",0.0,null));
-            contact_info_controller.insertContactInfo(new ContactInformation(user.getEmail(),"","","",""));
+            Skill_Controller.insertSkill(new Skill("","","","","",user.getEmail()));
+            Education_Controller.insertEducation(new Education(user.getEmail(),"","",0.0,null));
+            ContactInfo_Controller.insertContactInfo(new ContactInformation(user.getEmail(),"","","",""));
         }
 
         else

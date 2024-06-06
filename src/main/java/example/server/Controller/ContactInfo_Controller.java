@@ -8,56 +8,51 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class ContactInfo_Controller {
-    private ContactInformation_DataBase contact_info_db ;
     private static final Pattern NUMBER_FORMAT = Pattern.compile("^\\+?[0-9. ()-]{7,15}$");
+    private static ContactInformation_DataBase contact_info_db ;
 
-
-    public ContactInfo_Controller() throws SQLException {
-        contact_info_db = new ContactInformation_DataBase();
+    static {
+        try {
+            contact_info_db = new ContactInformation_DataBase();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public ContactInformation_DataBase get_contact_info_db() {
-        return contact_info_db;
+
+    public static void insertContactInfo(ContactInformation contactInformation) throws SQLException {
+            contact_info_db.insertContact(contactInformation);
     }
 
-    public void setContact_info_db(ContactInformation_DataBase contact_info_db) {
-        this.contact_info_db = contact_info_db;
-    }
-
-    public void insertContactInfo(ContactInformation contactInformation) throws SQLException {
-            this.contact_info_db.insertContact(contactInformation);
-    }
-
-    public void updateContactInfo(ContactInformation contactInformation) throws SQLException {
+    public static void updateContactInfo(ContactInformation contactInformation) throws SQLException {
         if(isValid(contactInformation))
-            this.contact_info_db.updateContact(contactInformation);
+            contact_info_db.updateContact(contactInformation);
         else
             throw new IllegalArgumentException("Contact information is not valid : view link is null or phone number is not valid " );
-
     }
 
-    public void deleteContactInfoById(int id) throws SQLException {
-        this.contact_info_db.deleteContact(id);
+    public static void deleteContactInfoById(int id) throws SQLException {
+        contact_info_db.deleteContact(id);
     }
 
-    public void deleteContactInfoByEmail(String email) throws SQLException {
-        this.contact_info_db.deleteContactOfUser(email);
+    public static void deleteContactInfoByEmail(String email) throws SQLException {
+        contact_info_db.deleteContactOfUser(email);
     }
 
-    public void deleteAllContactInfo() throws SQLException {
-        this.contact_info_db.deleteAllContacts();
+    public static void deleteAllContactInfo() throws SQLException {
+        contact_info_db.deleteAllContacts();
     }
 
-    public ArrayList<ContactInformation> getAllContactInfo() throws SQLException {
-        return this.contact_info_db.getAllContactInfo();
+    public static ArrayList<ContactInformation> getAllContactInfo() throws SQLException {
+        return contact_info_db.getAllContactInfo();
     }
 
-    public ContactInformation getContactInfoOfUser(String email) throws SQLException {
-        return this.contact_info_db.getContactInfoOfUser(email);
+    public static ContactInformation getContactInfoOfUser(String email) throws SQLException {
+        return contact_info_db.getContactInfoOfUser(email);
     }
 
-    public  ContactInformation getContactInfoById(int id) throws SQLException {
-        return this.contact_info_db.getContactInfoById(id);
+    public static ContactInformation getContactInfoById(int id) throws SQLException {
+        return contact_info_db.getContactInfoById(id);
     }
 
 
@@ -98,11 +93,4 @@ public class ContactInfo_Controller {
         else
             return viewLinkValidator(contact.getViewLink()) && Mobile_phoneNumberValidator(contact.getMobile_PhoneNumber());
     }
-
-
-
-
-
-
-
 }

@@ -10,65 +10,60 @@ import java.util.Date;
 
 public class Education_Controller {
 
-    private Education_DataBase educationDataBase;
+    private static Education_DataBase educationDataBase;
 
-    public Education_Controller() throws SQLException {
-        educationDataBase = new Education_DataBase();
+   static {
+       try {
+           educationDataBase = new Education_DataBase();
+       } catch (SQLException e) {
+           throw new RuntimeException(e);
+       }
+   }
 
-    }
-
-    public void insertEducation(Education education) throws SQLException {
+    public static void insertEducation(Education education) throws SQLException {
         if(isValid(education))
-            this.educationDataBase.insertEducation(education);
+            educationDataBase.insertEducation(education);
         else
             throw new IllegalArgumentException("Invalid education ! : school name or field is empty");
     }
 
-    public void updateEducation(Education education) throws SQLException {
+    public static void updateEducation(Education education) throws SQLException {
         if(isValid(education))
-            this.educationDataBase.updateEducation(education);
+            educationDataBase.updateEducation(education);
         else
             throw new IllegalArgumentException("Invalid education ! : school name or field is empty");
     }
 
-    public void deleteEducation(int id) throws SQLException {
-        this.educationDataBase.deleteEducation(id);
+    public static void deleteEducation(int id) throws SQLException {
+        educationDataBase.deleteEducation(id);
     }
 
-    public void deleteEducationOfUser(String email) throws SQLException {
-        this.educationDataBase.deleteEducationOfUser(email);
+    public static void deleteEducationOfUser(String email) throws SQLException {
+        educationDataBase.deleteEducationOfUser(email);
     }
 
-    public void deleteAllEducations() throws SQLException {
-        this.educationDataBase.deleteAllEducations();
+    public static void deleteAllEducations() throws SQLException {
+        educationDataBase.deleteAllEducations();
     }
 
-    public ArrayList<Education> getAllEducations() throws SQLException {
-        return this.educationDataBase.getAllEducations();
+    public static ArrayList<Education> getAllEducations() throws SQLException {
+        return educationDataBase.getAllEducations();
     }
 
-    public ArrayList<Education> getAllEducationsOfUser(String email) throws SQLException {
-        return this.educationDataBase.getAllEducationsOfUser(email);
+    public static ArrayList<Education> getAllEducationsOfUser(String email) throws SQLException {
+        return educationDataBase.getAllEducationsOfUser(email);
     }
 
-    public ArrayList<Education> getEducationOfField(String field) throws SQLException {
-        return this.educationDataBase.getEducationOfField(field);
+    public static ArrayList<Education> getEducationOfField(String field) throws SQLException {
+        return educationDataBase.getEducationOfField(field);
     }
 
-    public ArrayList<Education> getEducationOfSchool(String school) throws SQLException {
-        return this.educationDataBase.getEducationOfSchool(school);
+    public static ArrayList<Education> getEducationOfSchool(String school) throws SQLException {
+        return educationDataBase.getEducationOfSchool(school);
     }
 
-    public Education_DataBase getEducationDataBase() {
-        return educationDataBase;
-    }
-
-    public void setEducationDataBase(Education_DataBase educationDataBase) {
-        this.educationDataBase = educationDataBase;
-    }
-
-    public ArrayList<Education> getEducationOfActivityCommunity(String Activity_Community) throws SQLException {
-        return this.educationDataBase.getEducationOfActivityCommunity(Activity_Community);
+    public static ArrayList<Education> getEducationOfActivityCommunity(String Activity_Community) throws SQLException {
+        return educationDataBase.getEducationOfActivityCommunity(Activity_Community);
     }
 
     public static boolean schoolNameValidator(String schoolName) {
