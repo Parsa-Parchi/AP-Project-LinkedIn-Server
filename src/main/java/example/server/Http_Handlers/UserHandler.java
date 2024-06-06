@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 
 
@@ -71,7 +72,29 @@ public class UserHandler {
         catch (Exception e) {
             Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
         }
+    }
 
+    public static void retrieveAllUserHandler(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing or invalid")));
+            return;
+        }
 
+        else if(!Authorization_Util.validateAuthToken(exchange,token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        try {
+            ArrayList<User> users = UserController.getAllUsers();
+            Server.sendResponse(exchange, 200, gson.toJson(users));
+        }
+        catch (SQLException e){
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        }
+        catch (Exception e) {
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
     }
 }
