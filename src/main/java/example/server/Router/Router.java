@@ -1,6 +1,7 @@
 package example.server.Router;
 
 import example.server.Http_Handlers.ProfileHandler;
+import example.server.Http_Handlers.Search_Handler;
 import example.server.Http_Handlers.UserHandler;
 import example.server.Server;
 
@@ -21,6 +22,9 @@ public class Router {
         server.put("/profile/update/contact-info", ProfileHandler::updateContactInfoHandler);
         server.put("/profile/update/education", ProfileHandler::educationUpdateHandler);
         server.post("/profile/add/education", ProfileHandler::addEducationHandler);
+        server.get("/search", Search_Handler::searchByString);
+
+
 
     }
 

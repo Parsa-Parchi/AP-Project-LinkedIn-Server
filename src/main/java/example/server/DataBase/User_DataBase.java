@@ -176,5 +176,37 @@ public class User_DataBase {
 
     }
 
+    public  ArrayList<User> getUsersBySearchedString(String searchedString) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE firstname LIKE ? OR lastName LIKE ? OR additionalName LIKE ?");
+        statement.setString(1, "%" + searchedString + "%");
+        statement.setString(2, "%" + searchedString + "%");
+        statement.setString(3, "%" + searchedString + "%");
+        ResultSet resultSet = statement.executeQuery();
+        ArrayList<User> users = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String userEmail = resultSet.getString("email");
+            String password = resultSet.getString("password");
+            String firstName = resultSet.getString("firstname");
+            String lastName = resultSet.getString("lastName");
+            String additionalName = resultSet.getString("additionalName");
+            String avatarUrl = resultSet.getString("avatar_url");
+            String backgroundUrl = resultSet.getString("background_url");
+            String headline = resultSet.getString("headline");
+            String country = resultSet.getString("country");
+            String city = resultSet.getString("city");
+            int followers = resultSet.getInt("followers");
+            int followings = resultSet.getInt("followings");
+            int connections = resultSet.getInt("connections");
+
+            User user = new User(id, userEmail, password, firstName, lastName, additionalName,
+                    avatarUrl, backgroundUrl, headline, country, city, followers, followings, connections);
+
+            users.add(user);
+
+        }
+        return users;
+    }
+
 
 }
