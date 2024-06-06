@@ -26,21 +26,10 @@ public class Authentication_Controller {
     public static String LogIn(String email, String password) throws Exception
     {
         User user = user_dataBase.getUserByEmail(email);
-        if (user!=null && user.getPassword().equals(decodeBase64(password))) {
+        if (user!=null && user.getPassword().equals(password)) {
             return jwt_Util.generateToken(email);
         }
         else
             throw new IllegalArgumentException("Invalid email or password");
     }
-
-
-
-
-    public static String decodeBase64(String base64EncodedString) {
-        // Decode the Base64 encoded string
-        byte[] decodedBytes = Base64.getDecoder().decode(base64EncodedString);
-        // Convert the decoded bytes back to a string
-        return new String(decodedBytes);
-    }
-
 }
