@@ -17,8 +17,8 @@ public class Router {
         server.get("/user/contact-info",UserHandler::getContactInfoOfUserHandler);
         server.get("/user/educations",UserHandler::getEducationsOfUserHandler);
         server.get("/profile", ProfileHandler::retrieveProfileOfUserHandler);
-        server.get("/profile/update/user", ProfileHandler::updateUserProfileHandler);
-        server.get("/profile/update/skill", ProfileHandler::updateSkillProfileHandler);
+        server.put("/profile/update/user", ProfileHandler::updateUserProfileHandler);
+        server.put("/profile/update/skill", ProfileHandler::updateSkillProfileHandler);
 
     }
 
