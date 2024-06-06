@@ -7,8 +7,10 @@ import example.server.Server;
 public class Router {
 
     public static void addRoute(Server server) {
+
         server.post("/signup", UserHandler::SignUpHandler);
         server.post("/login", Authentication_Handler::LogInHandler);
+
     }
 
 }
