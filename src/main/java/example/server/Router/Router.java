@@ -12,6 +12,7 @@ public class Router {
         server.post("/login", Authentication_Handler::LogInHandler);
         server.get("/user",UserHandler::retrieveUserHandler);
         server.get("/users",UserHandler::retrieveAllUserHandler);
+        server.get("/user/skill",UserHandler::getSkillOfUserHandler);
 
     }
 
