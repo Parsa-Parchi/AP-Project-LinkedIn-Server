@@ -13,7 +13,8 @@ public class Router {
         server.get("/user",UserHandler::retrieveUserHandler);
         server.get("/users",UserHandler::retrieveAllUserHandler);
         server.get("/user/skill",UserHandler::getSkillOfUserHandler);
-        server.get("/user/contact-info",UserHandler::getSkillOfUserHandler);
+        server.get("/user/contact-info",UserHandler::getContactInfoOfUserHandler);
+        server.get("/user/educations",UserHandler::getEducationsOfUserHandler);
 
     }
 
