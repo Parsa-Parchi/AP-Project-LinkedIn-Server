@@ -77,15 +77,15 @@ public class UserController {
     }
 
 
-    public static boolean ValidName(String name) throws SQLException {
+    public static boolean ValidName(String name)  {
         return name.matches("^[a-zA-Z]+$");
     }
 
-    public static boolean ValidEmail(String email) throws SQLException {
+    public static boolean ValidEmail(String email)  {
         return email.matches("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
     }
 
-    public static boolean ValidPassword(String password) throws SQLException {
+    public static boolean ValidPassword(String password)  {
         return password.matches("^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$") && password.length() >= 8;
     }
 

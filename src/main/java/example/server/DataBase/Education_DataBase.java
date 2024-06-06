@@ -24,7 +24,7 @@ public class Education_DataBase {
                 + "end_date DATE,"
                 + "Activity_Community VARCHAR(500),"
                 + "description VARCHAR(1000),"
-                + "FOREIGN KEY (email) REFERENCES users (email) ON DELETE CASCADE"
+                + "FOREIGN KEY (email) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
         statement.executeUpdate();

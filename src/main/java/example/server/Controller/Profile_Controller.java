@@ -12,7 +12,7 @@ import example.server.models.Education;
 
 public class Profile_Controller {
 
-    public static void updateUser(User user) throws SQLException {
+    public static void updateUser(User user) throws Exception {
         UserController.updateUser(user);
     }
 
