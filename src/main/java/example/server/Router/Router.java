@@ -1,6 +1,7 @@
 package example.server.Router;
 
 
+import example.server.Http_Handlers.PostHandler;
 import example.server.Http_Handlers.ProfileHandler;
 import example.server.Http_Handlers.Search_Handler;
 import example.server.Http_Handlers.UserHandler;
@@ -28,6 +29,9 @@ public class Router {
         server.get("/search/{String}", Search_Handler::searchByString);
         server.get("/user/{firstname}/{lastName}/profile", ProfileHandler::retrieveAnotherProfileHandler);
 
+
+        server.post("/new post", PostHandler::newPostHandler);
+        server.delete("/post delete/{Id}",PostHandler::deletePostHandler);
 
 
     }
