@@ -11,7 +11,6 @@ import example.server.Utilities.Authorization_Util;
 import example.server.Utilities.jwt_Util;
 import example.server.models.*;
 
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -20,7 +19,9 @@ import java.util.HashMap;
 public class ProfileHandler {
     private static final Gson gson = new Gson();
 
-    public static void retrieveProfileOfUserHandler(HttpExchange exchange) throws IOException {
+
+
+    public static void retrieveProfileHandler(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
@@ -48,6 +49,39 @@ public class ProfileHandler {
             Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
         }
     }
+
+    public static void retrieveAnotherProfileHandler(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        }
+        else if(!Authorization_Util.validateAuthToken(exchange,token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        User user = gson.fromJson(requestBody, User.class);
+
+        try {
+            Profile profile = Profile_Controller.getProfile(user.getEmail());
+            if(profile == null) {
+                Server.sendResponse(exchange, 404, gson.toJson(Collections.singletonMap("error ", "Profile not found")));
+            }
+            else
+                Server.sendResponse(exchange, 200, gson.toJson(profile));
+        }
+        catch (SQLException e) {
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        }
+        catch (Exception e) {
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+
+    }
+
+
 
 
     public static void updateUserProfileHandler(HttpExchange exchange) throws IOException {

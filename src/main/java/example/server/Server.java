@@ -25,6 +25,49 @@ public class Server  {
         server.start();
     }
 
+    public void get (String path , HttpHandler requestHandler) {
+        server.createContext(path, createGetRequestHandler(requestHandler));
+    }
+    private HttpHandler createGetRequestHandler(HttpHandler requestHandler) {
+        return exchange -> {
+            if (exchange.getRequestMethod().equals("GET")) {
+                HashMap<String, String> queryParams = parseQueryParameters(exchange.getRequestURI().getQuery());
+                exchange.setAttribute("requestParams", queryParams);
+                requestHandler.handle(exchange);
+            }else {
+                sendMethodNotAllowedResponse(exchange);
+            }
+        };
+    }
+
+    private HashMap<String, String> parseQueryParameters(String query) {
+        HashMap<String, String> queryParams = new HashMap<>();
+        if (query != null) {
+            for (String param : query.split("&")) {
+                int separatorIndex = param.indexOf("=");
+                if (separatorIndex > 0) {
+                    String key = param.substring(0, separatorIndex);
+                    String value = param.substring(separatorIndex + 1);
+                    queryParams.put(key, value);
+                }
+            }
+        }
+        return queryParams;
+    }
+
+    public static void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
+        exchange.sendResponseHeaders(statusCode, response.length());
+        try (OutputStream outputStream = exchange.getResponseBody()) {
+            outputStream.write(response.getBytes());
+        }
+    }
+
+    private void sendMethodNotAllowedResponse(HttpExchange exchange) throws IOException {
+        sendResponse(exchange, 405, "Method Not Allowed");
+    }
+
+
+
 
     public void post(String path , HttpHandler requestHandler) {
         server.createContext(path, createPostRequestHandler(requestHandler));
@@ -42,20 +85,22 @@ public class Server  {
     }
 
 
-    public void get (String path , HttpHandler requestHandler) {
-        server.createContext(path, createGetRequestHandler(requestHandler));
-    }
-    private HttpHandler createGetRequestHandler(HttpHandler requestHandler) {
-        return exchange -> {
-            if (exchange.getRequestMethod().equals("GET")) {
-                HashMap<String, String> queryParams = parseQueryParameters(exchange.getRequestURI().getQuery());
-                exchange.setAttribute("requestParams", queryParams);
-                requestHandler.handle(exchange);
-            }else {
-                sendMethodNotAllowedResponse(exchange);
-            }
-        };
-    }
+//    public void get (String path , HttpHandler requestHandler) {
+//        server.createContext(path, createGetRequestHandler(requestHandler));
+//    }
+//    private HttpHandler createGetRequestHandler(HttpHandler requestHandler) {
+//        return exchange -> {
+//            if (exchange.getRequestMethod().equals("GET")) {
+//                HashMap<String, String> queryParams = parseQueryParameters(exchange.getRequestURI().getQuery());
+//                exchange.setAttribute("requestParams", queryParams);
+//                requestHandler.handle(exchange);
+//            }else {
+//                sendMethodNotAllowedResponse(exchange);
+//            }
+//        };
+//    }
+
+
 
 
     public void delete(String path , HttpHandler requestHandler) {
@@ -90,32 +135,32 @@ public class Server  {
         };
     }
 
-
-    private HashMap<String, String> parseQueryParameters(String query) {
-        HashMap<String, String> queryParams = new HashMap<>();
-        if (query != null) {
-            for (String param : query.split("&")) {
-                int separatorIndex = param.indexOf("=");
-                if (separatorIndex > 0) {
-                    String key = param.substring(0, separatorIndex);
-                    String value = param.substring(separatorIndex + 1);
-                    queryParams.put(key, value);
-                }
-            }
-        }
-        return queryParams;
-    }
-
-    public static void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
-        exchange.sendResponseHeaders(statusCode, response.length());
-        try (OutputStream outputStream = exchange.getResponseBody()) {
-            outputStream.write(response.getBytes());
-        }
-    }
-
-    private void sendMethodNotAllowedResponse(HttpExchange exchange) throws IOException {
-        sendResponse(exchange, 405, "Method Not Allowed");
-    }
+//
+//    private HashMap<String, String> parseQueryParameters(String query) {
+//        HashMap<String, String> queryParams = new HashMap<>();
+//        if (query != null) {
+//            for (String param : query.split("&")) {
+//                int separatorIndex = param.indexOf("=");
+//                if (separatorIndex > 0) {
+//                    String key = param.substring(0, separatorIndex);
+//                    String value = param.substring(separatorIndex + 1);
+//                    queryParams.put(key, value);
+//                }
+//            }
+//        }
+//        return queryParams;
+//    }
+//
+//    public static void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
+//        exchange.sendResponseHeaders(statusCode, response.length());
+//        try (OutputStream outputStream = exchange.getResponseBody()) {
+//            outputStream.write(response.getBytes());
+//        }
+//    }
+//
+//    private void sendMethodNotAllowedResponse(HttpExchange exchange) throws IOException {
+//        sendResponse(exchange, 405, "Method Not Allowed");
+//    }
 
 
 
