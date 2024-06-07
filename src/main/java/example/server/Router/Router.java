@@ -1,5 +1,6 @@
 package example.server.Router;
 
+
 import example.server.Http_Handlers.ProfileHandler;
 import example.server.Http_Handlers.Search_Handler;
 import example.server.Http_Handlers.UserHandler;
@@ -22,8 +23,10 @@ public class Router {
         server.put("/profile/update/contact-info", ProfileHandler::updateContactInfoHandler);
         server.put("/profile/update/education", ProfileHandler::educationUpdateHandler);
         server.post("/profile/add/education", ProfileHandler::addEducationHandler);
-        server.get("/search", Search_Handler::searchByString);
-        server.get("/user/profile", ProfileHandler::retrieveAnotherProfileHandler);
+
+        // Dynamic path without embedding the handler logic
+        server.get("/search/{String}", Search_Handler::searchByString);
+        server.get("/user/{firstname}/{lastName}/profile", ProfileHandler::retrieveAnotherProfileHandler);
 
 
 

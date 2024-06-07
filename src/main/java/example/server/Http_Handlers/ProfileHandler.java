@@ -11,7 +11,6 @@ import example.server.Utilities.Authorization_Util;
 import example.server.Utilities.jwt_Util;
 import example.server.models.*;
 
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -19,6 +18,8 @@ import java.util.HashMap;
 
 public class ProfileHandler {
     private static final Gson gson = new Gson();
+
+
 
     public static void retrieveProfileHandler(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
