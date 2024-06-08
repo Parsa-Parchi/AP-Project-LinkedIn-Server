@@ -33,8 +33,10 @@ public class Router {
         server.post("/new post", PostHandler::newPostHandler);
         server.delete("/post delete/{Id}",PostHandler::deletePostHandler);
         server.put("/post like/{postId}/{email}",PostHandler::postLikeHandler);
-        server.delete("/post dislike/{postID}/{email}",PostHandler::postdisLikeHandler);
-//        server.post("/put comment/postId/{email}",PostHandler::postLikeHandler);
+        server.delete("/post dislike/{postID}/{email}",PostHandler::postDisLikeHandler);
+        server.post("/put comment/{postId}/{email}/{comment}",PostHandler::postAddComment);
+        server.delete("/delete comment/{postId}/{email}/{comment}",PostHandler::postDeleteComment);
+
     }
 
 }
