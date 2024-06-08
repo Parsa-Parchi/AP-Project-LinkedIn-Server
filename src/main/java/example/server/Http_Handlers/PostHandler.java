@@ -212,7 +212,6 @@ public class PostHandler {
 
         String[] url = exchange.getRequestURI().getPath().split("/");
         int postId = Integer.parseInt(url[1]);
-        ;
         String email = url[2];
         String comment = url[3];
         Comment comment1 = new Comment(postId, email, comment);
@@ -226,5 +225,24 @@ public class PostHandler {
         }
     }
 
+    private static String [] returnHashTags(Post post) {
+        String postContent = post.getContent();
+        String[] Hashtags = new String[50];
+        int i = 0;
+        int j;
+        int k = 0;
+        while (postContent.length() != i) {
+            if (postContent.charAt(i) == '#') {
+                j = i;
+                while (postContent.charAt(i) != ' ') {
+                    i++;
+                }
+                Hashtags[k] = postContent.substring(j, i);
+                k++;
+            }
+            i++;
+        }
+        return Hashtags;
+    }
 
 }
