@@ -36,6 +36,7 @@ public class Router {
         server.delete("/post dislike/{postID}/{email}",PostHandler::postDisLikeHandler);
         server.post("/put comment/{postId}/{email}/{comment}",PostHandler::postAddComment);
         server.delete("/delete comment/{postId}/{email}/{comment}",PostHandler::postDeleteComment);
+        server.put("/post update/{postId}/{email}/{comment}",PostHandler::postUpdateComment);
 
     }
 

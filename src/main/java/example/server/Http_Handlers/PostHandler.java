@@ -198,4 +198,33 @@ public class PostHandler {
             Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
         }
     }
+
+    public static void postUpdateComment(HttpExchange exchange) throws IOException {
+        //check Authorization
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        } else if (!Authorization_Util.validateAuthToken(exchange, token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        String[] url = exchange.getRequestURI().getPath().split("/");
+        int postId = Integer.parseInt(url[1]);
+        ;
+        String email = url[2];
+        String comment = url[3];
+        Comment comment1 = new Comment(postId, email, comment);
+        try {
+            commentController.updateComment(comment1);
+            Server.sendResponse(exchange, 200, gson.toJson(comment1));
+        } catch (SQLException e) {
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        } catch (Exception e) {
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+    }
+
+
 }
