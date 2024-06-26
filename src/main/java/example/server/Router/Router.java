@@ -1,6 +1,7 @@
 package example.server.Router;
 
 
+import example.server.Http_Handlers.PostHandler;
 import example.server.Http_Handlers.ProfileHandler;
 import example.server.Http_Handlers.Search_Handler;
 import example.server.Http_Handlers.UserHandler;
@@ -29,6 +30,13 @@ public class Router {
         server.get("/user/{firstname}/{lastName}/profile", ProfileHandler::retrieveAnotherProfileHandler);
 
 
+        server.post("/new post", PostHandler::newPostHandler);
+        server.delete("/post delete/{Id}",PostHandler::deletePostHandler);
+        server.put("/post like/{postId}/{email}",PostHandler::postLikeHandler);
+        server.delete("/post dislike/{postID}/{email}",PostHandler::postDisLikeHandler);
+        server.post("/put comment/{postId}/{email}/{comment}",PostHandler::postAddComment);
+        server.delete("/delete comment/{postId}/{email}/{comment}",PostHandler::postDeleteComment);
+        server.put("/post update/{postId}/{email}/{comment}",PostHandler::postUpdateComment);
 
     }
 
