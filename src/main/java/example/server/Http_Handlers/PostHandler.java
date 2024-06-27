@@ -3,12 +3,14 @@ package example.server.Http_Handlers;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import example.server.Controller.Comment_Controller;
+import example.server.Controller.Hashtag_Controller;
 import example.server.Controller.Like_Controller;
 import example.server.Controller.Post_Controller;
 import example.server.Server;
 import example.server.Utilities.Authorization_Util;
 import example.server.Utilities.jwt_Util;
 import example.server.models.Comment;
+import example.server.models.Hashtag;
 import example.server.models.Like;
 import example.server.models.Post;
 
@@ -22,6 +24,7 @@ public class PostHandler {
     private static Post_Controller postController;
     private static Like_Controller likeController;
     private static Comment_Controller commentController;
+    private static Hashtag_Controller hashtagController;
     private static final Gson gson = new Gson();
 
     public void PostHandler() throws SQLException {
@@ -261,24 +264,132 @@ public class PostHandler {
     }
 
 
-    private static String [] returnHashTags(Post post) {
-        String postContent = post.getContent();
-        String[] Hashtags = new String[50];
-        int i = 0;
-        int j;
-        int k = 0;
-        while (postContent.length() != i) {
-            if (postContent.charAt(i) == '#') {
-                j = i;
-                while (postContent.charAt(i) != ' ') {
-                    i++;
-                }
-                Hashtags[k] = postContent.substring(j, i);
-                k++;
-            }
-            i++;
+    public static void newHashtagOfPost(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        } else if (!Authorization_Util.validateAuthToken(exchange, token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
         }
-        return Hashtags;
+        String[] url = exchange.getRequestURI().getPath().split("/");
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        Hashtag hashtag  = gson.fromJson(requestBody,Hashtag.class);
+        int postId = Integer.parseInt(url[1]);
+        hashtag.setPostId(postId);
+
+        try {
+            hashtagController.insertHashtag(hashtag);
+            Server.sendResponse(exchange, 200, "Hashtag Inserted successfully");
+        }
+        catch (SQLException e){
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        }
+        catch (Exception e){
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
     }
+
+    public static void UpdateHashtagOfPost(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        } else if (!Authorization_Util.validateAuthToken(exchange, token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+        String[] url = exchange.getRequestURI().getPath().split("/");
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        Hashtag hashtag  = gson.fromJson(requestBody,Hashtag.class);
+        int postId = Integer.parseInt(url[1]);
+        hashtag.setPostId(postId);
+        try {
+            hashtagController.updateHashtag(hashtag);
+            Server.sendResponse(exchange, 200, "Hashtag Updated successfully");
+        }
+        catch (SQLException e){
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        }
+        catch (Exception e){
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+
+    }
+
+    public static void DeleteHashtagOfPost(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        } else if (!Authorization_Util.validateAuthToken(exchange, token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+        String[] url = exchange.getRequestURI().getPath().split("/");
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        Hashtag hashtag  = gson.fromJson(requestBody,Hashtag.class);
+        int postId = Integer.parseInt(url[1]);
+        hashtag.setPostId(postId);
+        try {
+            hashtagController.deleteHashtag(hashtag);
+            Server.sendResponse(exchange, 200, "Hashtag Deleted successfully");
+        }
+        catch (SQLException e){
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        }
+        catch (Exception e){
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+
+    }
+
+    public static void DeleteHashtagsOfPost(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        } else if (!Authorization_Util.validateAuthToken(exchange, token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        String[] url = exchange.getRequestURI().getPath().split("/");
+        int postId = Integer.parseInt(url[1]);
+
+        try {
+            hashtagController.deleteHashtagsOfPost(postId);
+            Server.sendResponse(exchange, 200, "Hashtags Deleted successfully");
+        }
+        catch (SQLException e){
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+
+        }
+        catch (Exception e){
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+    }
+
+
+//    private static String [] returnHashTags(Post post) {
+//        String postContent = post.getContent();
+//        String[] Hashtags = new String[50];
+//        int i = 0;
+//        int j;
+//        int k = 0;
+//        while (postContent.length() != i) {
+//            if (postContent.charAt(i) == '#') {
+//                j = i;
+//                while (postContent.charAt(i) != ' ') {
+//                    i++;
+//                }
+//                Hashtags[k] = postContent.substring(j, i);
+//                k++;
+//            }
+//            i++;
+//        }
+//        return Hashtags;
+//    }
 
 }

@@ -38,6 +38,11 @@ public class Router {
         server.delete("/posts/{postId}/comments/delete",PostHandler::postDeleteComment);
         server.put("/posts/{postId}/comments/update",PostHandler::postUpdateComment);
         server.put("/posts/{postId}/update",PostHandler::postUpdate);
+        server.post("/posts/{postId}/hashtag",PostHandler::newHashtagOfPost);
+        server.put("/posts/{postId}/hashtag/update",PostHandler::UpdateHashtagOfPost);
+        server.delete("/posts/{postId}/hashtag/delete",PostHandler::DeleteHashtagOfPost);
+        server.delete("/posts/{postId}/hashtags/delete",PostHandler::DeleteHashtagsOfPost);
+
 
     }
 
