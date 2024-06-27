@@ -83,6 +83,21 @@ public class Post_DataBase {
         return null;
     }
 
+    public int getPostId(String email , String title , String content) throws SQLException {
+        int postId = -1;
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE email=? AND title=? AND content=?");
+        statement.setString(1,email);
+        statement.setString(2,title);
+        statement.setString(3,content);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+
+             postId = resultSet.getInt("id");
+            return postId;
+        }
+        return postId;
+    }
+
     public ArrayList<Post> getPosts(String email) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE email = ?");
         statement.setString(1,email);

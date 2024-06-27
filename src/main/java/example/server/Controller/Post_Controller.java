@@ -43,6 +43,9 @@ public class Post_Controller {
     public Post getPostById(int id) throws SQLException {
         return post_dataBase.getPost(id);
     }
+    public int getPostId(Post post) throws SQLException {
+        return post_dataBase.getPostId(post.getAuthor(),post.getTitle(),post.getContent());
+    }
 
     public ArrayList<Post> getAllPosts() throws SQLException {
         return post_dataBase.getAllPosts();
