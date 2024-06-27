@@ -17,7 +17,6 @@ public class Authorization_Util {
 
     public static boolean validateAuthToken(HttpExchange exchange, String token) throws IOException {
         if (!jwt_Util.validateToken(token)) {
-            Server.sendResponse(exchange, 401, "Invalid authorization token");
             return false;
         }
         return true;

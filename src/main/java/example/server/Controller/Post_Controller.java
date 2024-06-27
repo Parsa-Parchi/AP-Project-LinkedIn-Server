@@ -18,14 +18,14 @@ public class Post_Controller {
         if(isValidPost(post))
              post_dataBase.insertPost(post);
         else
-            throw new IllegalArgumentException("Invalid Post : Content or title are empty");
+            throw new IllegalArgumentException("Invalid Post : Content or title is empty");
     }
 
     public void updatePost(Post post) throws SQLException {
         if(isValidPost(post))
              post_dataBase.updatePost(post);
         else
-            throw new IllegalArgumentException("Invalid Post : Content or title are empty");
+            throw new IllegalArgumentException("Invalid Post : Content or title is empty");
     }
 
     public void deletePost(Post post) throws SQLException {

@@ -7,6 +7,7 @@ import example.server.Controller.Like_Controller;
 import example.server.Controller.Post_Controller;
 import example.server.Server;
 import example.server.Utilities.Authorization_Util;
+import example.server.Utilities.jwt_Util;
 import example.server.models.Comment;
 import example.server.models.Like;
 import example.server.models.Post;
@@ -55,7 +56,7 @@ public class PostHandler {
 
         catch (IllegalArgumentException e)
         {
-            Server.sendResponse(exchange, 400, e.getMessage());
+            Server.sendResponse(exchange, 400,"Bad Request : " + e.getMessage());
         }
 
         catch (Exception e) {
@@ -86,6 +87,7 @@ public class PostHandler {
         catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : -->>" + e.getMessage());
         }
+
     }
 
     public static void postLikeHandler(HttpExchange exchange) throws IOException {
@@ -101,14 +103,13 @@ public class PostHandler {
             return;
         }
 
+        String emailOfLike = jwt_Util.parseToken(token);
         String [] url = exchange.getRequestURI().getPath().split("/");
         int postId = Integer.parseInt(url[1]);
-        String emailOfPost = url[2];
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Like like = new Like(postId,emailOfPost, timestamp);
+        Like like = new Like(postId,emailOfLike);
         try{
             likeController.insertLike(like);
-            Server.sendResponse(exchange,200,gson.toJson(like));
+            Server.sendResponse(exchange,200,"Liked Successfully");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
         } catch (Exception e){
@@ -129,14 +130,13 @@ public class PostHandler {
             return;
         }
 
+        String emailOfLike = jwt_Util.parseToken(token);
         String [] url = exchange.getRequestURI().getPath().split("/");
         int postId = Integer.parseInt(url[1]);
-        String emailOfPost = url[2];
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Like like = new Like(postId,emailOfPost, timestamp);
+        Like like = new Like(postId,emailOfLike);
         try {
             likeController.deleteLike(url[2],postId);
-            Server.sendResponse(exchange,200,gson.toJson(like));
+            Server.sendResponse(exchange,200,"Disliked Successfully");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
         } catch (Exception e){
@@ -157,14 +157,16 @@ public class PostHandler {
             return;
         }
 
+        String emailOfComment = jwt_Util.parseToken(token);
+        String RequestBody = new String(exchange.getRequestBody().readAllBytes());
+        Comment comment = gson.fromJson(RequestBody,Comment.class);
         String [] url = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(url[1]);;
-        String email = url[2];
-        String comment = url[3];
-        Comment comment1 = new Comment(postId,email,comment);
+        int postId = Integer.parseInt(url[1]);
+        comment.setPostId(postId);
+        comment.setEmail(emailOfComment);
         try {
-            commentController.insertComment(comment1);
-            Server.sendResponse(exchange,200,gson.toJson(comment1));
+            commentController.insertComment(comment);
+            Server.sendResponse(exchange,200,"Comment was successfully added to this post");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
         } catch (Exception e){
@@ -183,15 +185,17 @@ public class PostHandler {
             return;
         }
 
+        String emailOfComment = jwt_Util.parseToken(token);
+        String RequestBody = new String(exchange.getRequestBody().readAllBytes());
+        Comment comment = gson.fromJson(RequestBody,Comment.class);
         String[] url = exchange.getRequestURI().getPath().split("/");
         int postId = Integer.parseInt(url[1]);
-        ;
-        String email = url[2];
-        String comment = url[3];
-        Comment comment1 = new Comment(postId, email, comment);
+        comment.setPostId(postId);
+        comment.setEmail(emailOfComment);
+
         try {
-            commentController.deleteComment(comment1);
-            Server.sendResponse(exchange, 200, gson.toJson(comment1));
+            commentController.deleteComment(comment);
+            Server.sendResponse(exchange, 200, "Comment was successfully deleted from this post");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
         } catch (Exception e) {
@@ -211,19 +215,51 @@ public class PostHandler {
         }
 
         String[] url = exchange.getRequestURI().getPath().split("/");
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        Comment comment = gson.fromJson(requestBody,Comment.class);
         int postId = Integer.parseInt(url[1]);
-        String email = url[2];
-        String comment = url[3];
-        Comment comment1 = new Comment(postId, email, comment);
-        try {
-            commentController.updateComment(comment1);
-            Server.sendResponse(exchange, 200, gson.toJson(comment1));
+        comment.setPostId(postId);
+        comment.setEmail(jwt_Util.parseToken(token));
+          try {
+            commentController.updateComment(comment);
+            Server.sendResponse(exchange, 200, "Comment Updated successfully");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
         } catch (Exception e) {
             Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
         }
     }
+
+    public static void postUpdate (HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        } else if (!Authorization_Util.validateAuthToken(exchange, token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        String[] url = exchange.getRequestURI().getPath().split("/");
+        String requestBody = new String(exchange.getRequestBody().readAllBytes());
+        Post post = gson.fromJson(requestBody,Post.class);
+        int postId = Integer.parseInt(url[1]);
+        post.setId(postId);
+        try {
+            postController.updatePost(post);
+            Server.sendResponse(exchange, 200, "Post Updated successfully");
+        }
+        catch (IllegalArgumentException e){
+            Server.sendResponse(exchange, 400,"Bad Request : " + e.getMessage());
+        }
+        catch (SQLException e){
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+        }
+        catch (Exception e){
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+    }
+
 
     private static String [] returnHashTags(Post post) {
         String postContent = post.getContent();
