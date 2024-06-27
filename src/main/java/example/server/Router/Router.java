@@ -38,6 +38,7 @@ public class Router {
         server.delete("/posts/{postId}/comments/delete",PostHandler::postDeleteComment);
         server.put("/posts/{postId}/comments/update",PostHandler::postUpdateComment);
         server.put("/posts/{postId}/update",PostHandler::postUpdate);
+        server.get("/{hashtag}/search/posts",PostHandler::searchPostByHashtag);
 
 
 

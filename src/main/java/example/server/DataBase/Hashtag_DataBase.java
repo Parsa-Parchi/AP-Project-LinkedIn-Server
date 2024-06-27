@@ -100,6 +100,19 @@ public class Hashtag_DataBase {
         return hashtags;
     }
 
+    public ArrayList<Integer> getPostIdsOfHashtag(String hashtag) throws SQLException {
+
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM hashtags WHERE hashtag = ?");
+        preparedStatement.setString(1, hashtag);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        ArrayList<Integer> postIds = new ArrayList<>();
+        while (resultSet.next()) {
+            postIds.add(resultSet.getInt("id"));
+
+        }
+        return postIds;
+    }
+
 
 
 }

@@ -282,6 +282,37 @@ public class PostHandler {
         }
     }
 
+    public static void searchPostByHashtag(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        } else if (!Authorization_Util.validateAuthToken(exchange, token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        String[] url = exchange.getRequestURI().getPath().split("/");
+        String hashtag = url[0];
+        ArrayList<Post> posts = new ArrayList<>();
+        ArrayList <Integer> postIds ;
+        try {
+            postIds = hashtagController.getPostIdsOfHashtag(hashtag);
+           for (Integer postId : postIds) {
+               posts.add(postController.getPostById(postId));
+           }
+           Server.sendResponse(exchange, 200, gson.toJson(posts));
+        }
+        catch (SQLException e){
+            Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
+
+        }
+        catch (Exception e){
+            Server.sendResponse(exchange, 500, "Internal Server error: " + e.getMessage());
+        }
+
+    }
+
 
     private static ArrayList<String> returnHashTags(Post post) {
         String postContent = post.getContent();

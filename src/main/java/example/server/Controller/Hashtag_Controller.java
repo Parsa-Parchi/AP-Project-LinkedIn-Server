@@ -44,4 +44,7 @@ public class Hashtag_Controller {
        return hashtag_db.getHashtagsOfPost(post_id);
     }
 
-}
+    public ArrayList<Integer> getPostIdsOfHashtag(String hashtag) throws SQLException {
+        return hashtag_db.getPostIdsOfHashtag(hashtag);
+    }
+ }
