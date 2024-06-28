@@ -66,12 +66,38 @@ public class Media_DataBase {
 
     }
 
-    public void deleteMediaOfPost(int postId) throws SQLException {
+    public void deleteMediasOfPost(int postId) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Media WHERE post_id = ? ");
         preparedStatement.setInt(1, postId);
         preparedStatement.executeUpdate();
 
     }
+
+    public void deleteAllMedias() throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Media");
+        preparedStatement.executeUpdate();
+    }
+
+    public Media getMedia(int id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Media WHERE id = ?");
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        Media media = null;
+        if (resultSet.next()) {
+            int postId = resultSet.getInt("post_id");
+            String filePath = resultSet.getString("file_path");
+            String fileName = resultSet.getString("file_name");
+            String fileType = resultSet.getString("file_type");
+            long fileSize = resultSet.getLong("file_size");
+            Timestamp uploadDate = resultSet.getTimestamp("upload_date");
+            media =  new Media(postId, filePath, fileName, fileType, fileSize, uploadDate);
+
+
+        }
+        return media;
+    }
+
+
     public Media getMedia(String fileName , int postId) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Media WHERE file_name = ? AND post_id = ?");
         preparedStatement.setString(1, fileName);
