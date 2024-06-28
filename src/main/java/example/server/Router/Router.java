@@ -40,8 +40,9 @@ public class Router {
         server.delete("/unfollow/{email}", Follow_Handler::UnFollowUser);
         server.get("/followers", Follow_Handler::getFollowers);
         server.get("/followings", Follow_Handler::getFollowing);
-
-
+        server.post("/connect/{receiver}/request",Connect_Handler::ConnectRequest);
+        server.put("/connect/{sender}/accept",Connect_Handler::AcceptRequest);
+        server.get("/connect/requests",Connect_Handler::getNotAcceptedConnectRequest);
 
     }
 

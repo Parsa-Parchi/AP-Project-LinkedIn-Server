@@ -59,6 +59,15 @@ public class Connect_DataBase {
         }
     }
 
+    public void updateConnect(Connect connect) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("UPDATE connections SET accepted = True WHERE Request_Sender = ? AND Request_Receiver = ? AND accepted = FALSE AND notes = ? ");
+        statement.setString(1,connect.getRequest_Sender());
+        statement.setString(2,connect.getRequest_Receiver());
+        statement.setString(3,connect.getNotes());
+        statement.executeUpdate();
+
+    }
+
     public void deleteConnect(int id) throws SQLException {
 
         PreparedStatement statement1 = connection.prepareStatement("SELECT * FROM connections WHERE id = ?");

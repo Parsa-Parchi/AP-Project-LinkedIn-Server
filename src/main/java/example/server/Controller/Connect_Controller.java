@@ -8,67 +8,79 @@ import java.util.ArrayList;
 
 public class Connect_Controller {
 
-    private Connect_DataBase connectDataBase;
+    private static Connect_DataBase connectDataBase;
 
-    public Connect_Controller() throws SQLException{
-        connectDataBase = new Connect_DataBase();
-    }
-
-    public void insertConnect(Connect conn) throws SQLException {
-        this.connectDataBase.insertConnect(conn);
-    }
-
-    public void deleteConnect(int id) throws SQLException {
-        this.connectDataBase.deleteConnect(id);
-    }
-
-    public void deleteConnect(Connect conn) throws SQLException {
-        this.connectDataBase.deleteConnect(conn);
+    static {
+        try {
+            connectDataBase = new Connect_DataBase();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void deleteConnectOfSender(String sender) throws SQLException {
-        this.connectDataBase.deleteConnectOfSender(sender);
+    public static void insertConnect(Connect conn) throws SQLException {
+        connectDataBase.insertConnect(conn);
     }
 
-    public void deleteConnectOfReceiver(String receiver) throws SQLException {
-        this.connectDataBase.deleteConnectOfReceiver(receiver);
+    public static void updateConnect(Connect conn) throws SQLException {
+        connectDataBase.updateConnect(conn);
     }
 
-    public void deleteConnectOfAccepted(boolean accepted) throws SQLException {
-        this.connectDataBase.deleteConnectOfAccepted(accepted);
+    public static void deleteConnect(int id) throws SQLException {
+        connectDataBase.deleteConnect(id);
     }
 
-    public void deleteAllConnects() throws SQLException {
-        this.connectDataBase.deleteAllConnects();
+    public static void deleteConnect(Connect conn) throws SQLException {
+        connectDataBase.deleteConnect(conn);
     }
 
-    public ArrayList<Connect> getAllConnects() throws SQLException {
-        return this.connectDataBase.getAllConnects();
+    public static void deleteConnectOfSender(String sender) throws SQLException {
+        connectDataBase.deleteConnectOfSender(sender);
     }
 
-    public ArrayList<Connect> getConnectionsOfSender(String sender) throws SQLException {
-        return this.connectDataBase.getConnectionsOfSender(sender);
+    public static void deleteConnectOfReceiver(String receiver) throws SQLException {
+        connectDataBase.deleteConnectOfReceiver(receiver);
     }
 
-    public ArrayList<Connect> getConnectionsOfReceiver(String receiver) throws SQLException {
-        return this.connectDataBase.getConnectionsOfReceiver(receiver);
+    public static void deleteConnectOfAccepted(boolean accepted) throws SQLException {
+        connectDataBase.deleteConnectOfAccepted(accepted);
     }
 
-    public ArrayList<Connect> getConnectionsOfAccepted(boolean accepted) throws SQLException {
-        return this.connectDataBase.getConnectionsOfAccepted(accepted);
+    public static void deleteAllConnects() throws SQLException {
+        connectDataBase.deleteAllConnects();
     }
 
-    public Connect getConnectionOfSenderAndReceiver(String sender, String receiver) throws SQLException {
-        return this.connectDataBase.getConnectionOfSenderAndReceiver(sender, receiver);
+    public static ArrayList<Connect> getAllConnects() throws SQLException {
+        return connectDataBase.getAllConnects();
     }
-    public Connect getConnectionOfSenderAndReceiver(String sender ,String receiver , boolean accepted) throws SQLException{
-        return this.connectDataBase.getConnectionOfSenderAndReceiver(sender,receiver,accepted);
+
+    public static ArrayList<Connect> getConnectionsOfSender(String sender) throws SQLException {
+        return connectDataBase.getConnectionsOfSender(sender);
     }
-    public ArrayList<Connect> getAcceptedConnectionsOfSender(String sender ,boolean accepted) throws SQLException{
-        return this.connectDataBase.getAcceptedConnectionsOfSender(sender,accepted);
+
+    public static ArrayList<Connect> getConnectionsOfReceiver(String receiver) throws SQLException {
+        return connectDataBase.getConnectionsOfReceiver(receiver);
     }
-    public ArrayList<Connect> getAcceptedConnectionsOfReceiver(String receiver ,boolean accepted) throws SQLException{
-        return this.connectDataBase.getAcceptedConnectionsOfReceiver(receiver,accepted);
+
+    public static ArrayList<Connect> getConnectionsOfAccepted(boolean accepted) throws SQLException {
+        return connectDataBase.getConnectionsOfAccepted(accepted);
+    }
+
+    public static Connect getConnectionOfSenderAndReceiver(String sender, String receiver) throws SQLException {
+        return connectDataBase.getConnectionOfSenderAndReceiver(sender, receiver);
+    }
+    public static Connect getConnectionOfSenderAndReceiver(String sender ,String receiver , boolean accepted) throws SQLException{
+        return connectDataBase.getConnectionOfSenderAndReceiver(sender,receiver,accepted);
+    }
+    public static ArrayList<Connect> getAcceptedConnectionsOfSender(String sender ,boolean accepted) throws SQLException{
+        return connectDataBase.getAcceptedConnectionsOfSender(sender,accepted);
+    }
+    public static ArrayList<Connect> getAcceptedConnectionsOfReceiver(String receiver ,boolean accepted) throws SQLException{
+        return connectDataBase.getAcceptedConnectionsOfReceiver(receiver,accepted);
     }
 
 }
