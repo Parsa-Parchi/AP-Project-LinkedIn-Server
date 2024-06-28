@@ -1,10 +1,7 @@
 package example.server.Router;
 
 
-import example.server.Http_Handlers.PostHandler;
-import example.server.Http_Handlers.ProfileHandler;
-import example.server.Http_Handlers.Search_Handler;
-import example.server.Http_Handlers.UserHandler;
+import example.server.Http_Handlers.*;
 import example.server.Server;
 
 public class Router {
@@ -39,8 +36,13 @@ public class Router {
         server.put("/posts/{postId}/comments/update",PostHandler::postUpdateComment);
         server.put("/posts/{postId}/update",PostHandler::postUpdate);
         server.get("/{hashtag}/search/posts",PostHandler::searchPostByHashtag);
-
-
+        server.post("/follow/{email}", Follow_Handler::FollowUser);
+        server.delete("/unfollow/{email}", Follow_Handler::UnFollowUser);
+        server.get("/followers", Follow_Handler::getFollowers);
+        server.get("/followings", Follow_Handler::getFollowing);
+        server.post("/connect/{receiver}/request",Connect_Handler::ConnectRequest);
+        server.put("/connect/{sender}/accept",Connect_Handler::AcceptRequest);
+        server.get("/connect/requests",Connect_Handler::getNotAcceptedConnectRequest);
 
     }
 

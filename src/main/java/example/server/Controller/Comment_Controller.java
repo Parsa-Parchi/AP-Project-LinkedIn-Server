@@ -8,57 +8,63 @@ import java.util.ArrayList;
 
 public class Comment_Controller {
 
-    private Comment_DataBase comment_dataBase;
+    private static Comment_DataBase comment_dataBase;
 
-    public Comment_Controller() throws SQLException {
-        comment_dataBase = new Comment_DataBase();
+    static {
+        try {
+            comment_dataBase = new Comment_DataBase();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    public void insertComment(Comment comment) throws SQLException {
+    public static void insertComment(Comment comment) throws SQLException {
         comment_dataBase.insertComment(comment);
 
     }
 
-    public void updateComment(Comment comment) throws SQLException {
+    public static void updateComment(Comment comment) throws SQLException {
         comment_dataBase.updateComment(comment);
 
     }
 
-    public void deleteComment(Comment comment) throws SQLException {
+    public static void deleteComment(Comment comment) throws SQLException {
         comment_dataBase.deleteComment(comment);
 
     }
 
-    public void deleteComment(int id) throws SQLException {
+    public static void deleteComment(int id) throws SQLException {
         comment_dataBase.deleteComment(id);
     }
 
-    public void deleteAllComments() throws SQLException {
+    public static void deleteAllComments() throws SQLException {
         comment_dataBase.deleteAllComments();
     }
 
-    public void deleteCommentOfPost(int postId) throws SQLException {
+    public static void deleteCommentOfPost(int postId) throws SQLException {
         comment_dataBase.getCommentsOfPost(postId);
 
     }
 
-    public void deleteCommentOfUser(String email) throws SQLException {
+    public static void deleteCommentOfUser(String email) throws SQLException {
         comment_dataBase.deleteCommentByUser(email);
     }
 
-    public ArrayList<Comment> getCommentsOfPost(int postId) throws SQLException {
+    public static ArrayList<Comment> getCommentsOfPost(int postId) throws SQLException {
         return comment_dataBase.getCommentsOfPost(postId);
     }
 
-    public ArrayList<Comment> getCommentsOfUser(String email) throws SQLException {
+    public static ArrayList<Comment> getCommentsOfUser(String email) throws SQLException {
         return comment_dataBase.getCommentsOfUser(email);
     }
 
-    public ArrayList<Comment> getAllComments() throws SQLException {
+    public static ArrayList<Comment> getAllComments() throws SQLException {
         return comment_dataBase.getAllComments();
     }
 
-    public ArrayList<Comment> getAllCommentsOfPostByUser(String email,int postId) throws SQLException {
+    public static ArrayList<Comment> getAllCommentsOfPostByUser(String email,int postId) throws SQLException {
         return comment_dataBase.getCommentsOfUserByPostId(email,postId);
     }
 }

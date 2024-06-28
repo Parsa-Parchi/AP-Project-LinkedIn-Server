@@ -22,17 +22,10 @@ import java.util.Collections;
 
 
 public class PostHandler {
-    private static Post_Controller postController;
-    private static Like_Controller likeController;
-    private static Comment_Controller commentController;
-    private static Hashtag_Controller hashtagController;
+
+
     private static final Gson gson = new Gson();
 
-    public void PostHandler() throws SQLException {
-        postController = new Post_Controller();
-        likeController = new Like_Controller();
-        commentController = new Comment_Controller();
-    }
 
     public static void newPostHandler(HttpExchange exchange) throws IOException {
         //check Authorization
@@ -52,10 +45,10 @@ public class PostHandler {
         ArrayList<String> hashtags = returnHashTags(post);
 
         try {
-            postController.insertPost(post);
-            int postId = postController.getPostId(post);
+            Post_Controller.insertPost(post);
+            int postId = Post_Controller.getPostId(post);
             for(String hashtag : hashtags) {
-                hashtagController.insertHashtag(new Hashtag(postId, hashtag));
+                Hashtag_Controller.insertHashtag(new Hashtag(postId, hashtag));
             }
             Server.sendResponse(exchange, 200, "The Post was successfully added to the Database");
         }
@@ -91,7 +84,7 @@ public class PostHandler {
         int postId = Integer.parseInt(uri[1]);
 
         try {
-            postController.deletePost(postController.getPostById(postId));
+            Post_Controller.deletePost(Post_Controller.getPostById(postId));
             Server.sendResponse(exchange,200,"Post was successfully deleted");
         }
         catch (SQLException e) {
@@ -118,7 +111,7 @@ public class PostHandler {
         int postId = Integer.parseInt(url[1]);
         Like like = new Like(postId,emailOfLike);
         try{
-            likeController.insertLike(like);
+            Like_Controller.insertLike(like);
             Server.sendResponse(exchange,200,"Liked Successfully");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
@@ -145,7 +138,7 @@ public class PostHandler {
         int postId = Integer.parseInt(url[1]);
         Like like = new Like(postId,emailOfLike);
         try {
-            likeController.deleteLike(url[2],postId);
+            Like_Controller.deleteLike(url[2],postId);
             Server.sendResponse(exchange,200,"Disliked Successfully");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
@@ -175,7 +168,7 @@ public class PostHandler {
         comment.setPostId(postId);
         comment.setEmail(emailOfComment);
         try {
-            commentController.insertComment(comment);
+            Comment_Controller.insertComment(comment);
             Server.sendResponse(exchange,200,"Comment was successfully added to this post");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
@@ -204,7 +197,7 @@ public class PostHandler {
         comment.setEmail(emailOfComment);
 
         try {
-            commentController.deleteComment(comment);
+            Comment_Controller.deleteComment(comment);
             Server.sendResponse(exchange, 200, "Comment was successfully deleted from this post");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
@@ -231,7 +224,7 @@ public class PostHandler {
         comment.setPostId(postId);
         comment.setEmail(jwt_Util.parseToken(token));
           try {
-            commentController.updateComment(comment);
+            Comment_Controller.updateComment(comment);
             Server.sendResponse(exchange, 200, "Comment Updated successfully");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
@@ -259,15 +252,15 @@ public class PostHandler {
 
         try {
             if(post.getContent()==null){
-            postController.updatePost(post);
+            Post_Controller.updatePost(post);
             Server.sendResponse(exchange, 200, "Post Updated successfully");
             }
             else {
-                postController.updatePost(post);
-                hashtagController.deleteHashtagsOfPost(postId);
+               Post_Controller.updatePost(post);
+                Hashtag_Controller.deleteHashtagsOfPost(postId);
                 ArrayList<String> hashtags = returnHashTags(post);
                 for(String hashtag : hashtags){
-                    hashtagController.insertHashtag(new Hashtag(postId,hashtag));
+                    Hashtag_Controller.insertHashtag(new Hashtag(postId,hashtag));
                 }
             }
         }
@@ -297,9 +290,9 @@ public class PostHandler {
         ArrayList<Post> posts = new ArrayList<>();
         ArrayList <Integer> postIds ;
         try {
-            postIds = hashtagController.getPostIdsOfHashtag(hashtag);
+            postIds = Hashtag_Controller.getPostIdsOfHashtag(hashtag);
            for (Integer postId : postIds) {
-               posts.add(postController.getPostById(postId));
+               posts.add(Post_Controller.getPostById(postId));
            }
            Server.sendResponse(exchange, 200, gson.toJson(posts));
         }
