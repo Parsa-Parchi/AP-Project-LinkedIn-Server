@@ -46,6 +46,7 @@ public class Router {
 
         server.post("/media/upload/{postId}/", Media_Handler::UploadMedia);
         server.get("/media/get/{postId}/{file_name}",Media_Handler::RetrieveMedia);
+        server.delete("/media/delete/{postId}/{file_name}",Media_Handler::deleteMedia);
 
     }
 

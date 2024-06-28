@@ -59,6 +59,14 @@ public class Media_DataBase {
         preparedStatement.executeUpdate();
     }
 
+    public void deleteMedia(String filename,int postId) throws SQLException {
+        PreparedStatement preparedStatement =connection.prepareStatement("DELETE FROM Media WHERE post_id = ? AND file_name = ?");
+        preparedStatement.setInt(1, postId);
+        preparedStatement.setString(2, filename);
+        preparedStatement.executeUpdate();
+
+    }
+
     public void deleteMedia(String fileName) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Media WHERE file_name = ?");
         preparedStatement.setString(1, fileName);

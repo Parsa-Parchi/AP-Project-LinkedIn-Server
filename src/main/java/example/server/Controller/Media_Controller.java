@@ -22,6 +22,10 @@ public class Media_Controller {
         mediaDataBase.insertMedia(media);
     }
 
+    public static void deleteMedia(String filename,int postId) throws SQLException {
+        mediaDataBase.deleteMedia(filename,postId);
+    }
+
     public static void deleteMedia(Media media) throws SQLException {
         mediaDataBase.deleteMedia(media);
     }
