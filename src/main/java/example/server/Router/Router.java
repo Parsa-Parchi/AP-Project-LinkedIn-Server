@@ -44,6 +44,8 @@ public class Router {
         server.put("/connect/{sender}/accept",Connect_Handler::AcceptRequest);
         server.get("/connect/requests",Connect_Handler::getNotAcceptedConnectRequest);
 
+        server.post("/media/upload/{postId}/{file_name}", Media_Handler::UploadMedia);
+
     }
 
 }

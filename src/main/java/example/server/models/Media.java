@@ -35,6 +35,14 @@ public class Media {
         this.uploadDate = uploadDate;
     }
 
+    public Media(int postId, String filePath, String fileName, String fileType, long fileSize) {
+        this.postId = postId;
+        this.filePath = filePath;
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.fileSize = fileSize;
+    }
+
     public int getId() {
         return id;
     }
