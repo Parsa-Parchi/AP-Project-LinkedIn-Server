@@ -8,53 +8,52 @@ import java.util.ArrayList;
 
 public class Follow_Controller {
 
-    private Follow_DataBase followDataBase;
+    private static Follow_DataBase followDataBase;
 
-    public Follow_Controller() throws SQLException {
-        followDataBase = new Follow_DataBase();
+    static {
+
+        try {
+            followDataBase = new Follow_DataBase();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public void insertFollow(Follow follow) throws SQLException {
-        this.followDataBase.insertFollow(follow);
+    public static void insertFollow(Follow follow) throws SQLException {
+        followDataBase.insertFollow(follow);
     }
 
-    public void deleteFollow(Follow follow) throws SQLException {
-        this.followDataBase.deleteFollow(follow);
+    public static void deleteFollow(Follow follow) throws SQLException {
+        followDataBase.deleteFollow(follow);
     }
 
-    public void  deleteFollowById(int id) throws SQLException {
-        this.followDataBase.deleteFollow(id);
+    public static void  deleteFollowById(int id) throws SQLException {
+        followDataBase.deleteFollow(id);
     }
 
-    public void deleteFollowersOfUser(String followedEmail) throws SQLException {
-        this.followDataBase.deleteFollowersOfUser(followedEmail);
+    public static void deleteFollowersOfUser(String followedEmail) throws SQLException {
+        followDataBase.deleteFollowersOfUser(followedEmail);
     }
 
-    public void deleteFollowingOfUser(String followerEmail) throws SQLException {
-        this.followDataBase.deleteFollowingOfUser(followerEmail);
+    public static void deleteFollowingOfUser(String followerEmail) throws SQLException {
+        followDataBase.deleteFollowingOfUser(followerEmail);
     }
 
-    public void deleteAllFollows() throws SQLException {
-        this.followDataBase.deleteAllFollows();
+    public static void deleteAllFollows() throws SQLException {
+        followDataBase.deleteAllFollows();
     }
 
-    public ArrayList<String> getFollowersOfUser(String email) throws SQLException {
-        return this.followDataBase.getFollowersOfUser(email);
+    public static ArrayList<String> getFollowersOfUser(String email) throws SQLException {
+        return followDataBase.getFollowersOfUser(email);
     }
 
-    public ArrayList<String> getFollowingOfUser(String email) throws SQLException {
-        return this.followDataBase.getFollowingOfUser(email);
+    public static ArrayList<String> getFollowingOfUser(String email) throws SQLException {
+        return followDataBase.getFollowingOfUser(email);
     }
 
-    public ArrayList<Follow> getAllFollows() throws SQLException {
-        return this.followDataBase.getAllFollows();
-    }
-
-    public Follow_DataBase getFollowDataBase() {
-        return followDataBase;
-    }
-
-    public void setFollowDataBase(Follow_DataBase followDataBase) {
-        this.followDataBase = followDataBase;
+    public static ArrayList<Follow> getAllFollows() throws SQLException {
+        return followDataBase.getAllFollows();
     }
 }
