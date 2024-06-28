@@ -149,7 +149,6 @@ public class Media_Handler {
         String [] url = exchange.getRequestURI().getPath().split("/");
         String requestedFile = url[3];
         int postId = Integer.parseInt(url[2]);
-        Media media = null;
         try {
             Media_Controller.deleteMedia(requestedFile,postId);
         }
@@ -159,12 +158,33 @@ public class Media_Handler {
         catch (Exception e) {
             Server.sendResponse(exchange, 500, "internal server error : " + e.getMessage());
         }
-
-
-
-
     }
 
+
+    public static void deletMediasOfPost(HttpExchange exchange) throws IOException {
+        String token = Authorization_Util.getAuthToken(exchange);
+        if (token == null) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
+            return;
+        }
+
+        else if(!Authorization_Util.validateAuthToken(exchange,token)) {
+            Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
+            return;
+        }
+
+        String [] url = exchange.getRequestURI().getPath().split("/");
+        int postId = Integer.parseInt(url[2]);
+        try {
+            Media_Controller.deleteMediasOfPost(postId);
+        }
+        catch (SQLException e) {
+            Server.sendResponse(exchange, 500, "problem in database ");
+        }
+        catch (Exception e) {
+            Server.sendResponse(exchange, 500, "internal server error : " + e.getMessage());
+        }
+    }
 
 
 }
