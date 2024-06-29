@@ -5,9 +5,8 @@ import com.sun.net.httpserver.HttpExchange;
 import example.server.Controller.Media_Controller;
 import example.server.Server;
 import example.server.Utilities.Authorization_Util;
-import example.server.models.Media;
+import example.server.models.Media_Post;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -21,7 +20,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-public class Media_Handler {
+public class MediaOfPost_Handler {
     private static final Gson gson = new Gson();
     private static final String UPLOAD_DIRECTORY = "uploads";
 
@@ -57,8 +56,8 @@ public class Media_Handler {
                         new File(storeFile.getParent()).mkdirs();
                         item.write(storeFile);
 
-                        Media media = new Media( postId, filePath, fileName, item.getContentType(), item.getSize());
-                        Media_Controller.insertMedia(media);
+                        Media_Post media_post = new Media_Post( postId, filePath, fileName, item.getContentType(), item.getSize());
+                        Media_Controller.insertMedia(media_post);
                         Server.sendResponse(exchange,200,"File uploaded successfully: " + filePath);
                     }
                 }
@@ -95,14 +94,14 @@ public class Media_Handler {
         String requestedFile = url[3];
         int postId = Integer.parseInt(url[2]);
 
-        Media media = null;
+        Media_Post media_post = null;
         try {
-            media = Media_Controller.getMedia(requestedFile,postId);
-            if (media == null) {
+            media_post = Media_Controller.getMedia(requestedFile,postId);
+            if (media_post == null) {
                 Server.sendResponse(exchange, 404, "Media not found in Database");
             }
             else {
-                String filePath = media.getFilePath();
+                String filePath = media_post.getFilePath();
                 File file = new File(filePath);
                 if (file.exists() && !file.isDirectory()) {
                     String mimeType = Files.probeContentType(Paths.get(filePath));

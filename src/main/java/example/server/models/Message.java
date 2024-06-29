@@ -8,13 +8,16 @@ public class Message {
     private String Sender;
     private String Receiver ;
     private Timestamp timestamp ;
+    private String mediaUrl;
 
 
-
-    public Message(String sender, String receiver, String text) {
+    public Message(int id, String text, String sender, String receiver, Timestamp timestamp, String mediaUrl) {
+        this.id = id;
+        this.text = text;
         Sender = sender;
         Receiver = receiver;
-        this.text = text;
+        this.timestamp = timestamp;
+        this.mediaUrl = mediaUrl;
     }
 
     public Message(int id, String text, String sender, String receiver, Timestamp timestamp) {
@@ -23,6 +26,22 @@ public class Message {
         Sender = sender;
         Receiver = receiver;
         this.timestamp = timestamp;
+    }
+
+    public Message( String text, String sender, String receiver, Timestamp timestamp) {
+        this.text = text;
+        Sender = sender;
+        Receiver = receiver;
+        this.timestamp = timestamp;
+    }
+
+
+
+    public Message(String sender, String receiver, String text, String mediaUrl) {
+        Sender = sender;
+        Receiver = receiver;
+        this.text = text;
+        this.mediaUrl = mediaUrl;
     }
 
     public int getId() {
@@ -43,6 +62,14 @@ public class Message {
 
     public String getSender() {
         return Sender;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
     }
 
     public void setSender(String sender) {

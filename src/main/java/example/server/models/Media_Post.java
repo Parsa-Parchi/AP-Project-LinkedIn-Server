@@ -2,7 +2,7 @@ package example.server.models;
 
 import java.sql.Timestamp;
 
-public class Media {
+public class Media_Post {
     private int id;
     private int postId;
     private String filePath;
@@ -11,7 +11,7 @@ public class Media {
     private long fileSize;
     private Timestamp uploadDate;
 
-    public Media(int id, int postId, String filePath, String fileName, String fileType, long fileSize, Timestamp uploadDate) {
+    public Media_Post(int id, int postId, String filePath, String fileName, String fileType, long fileSize, Timestamp uploadDate) {
         this.id = id;
         this.postId = postId;
         this.filePath = filePath;
@@ -21,12 +21,12 @@ public class Media {
         this.uploadDate = uploadDate;
     }
 
-    public Media(int postId, String fileName) {
+    public Media_Post(int postId, String fileName) {
         this.postId = postId;
         this.fileName = fileName;
     }
 
-    public Media(int postId, String filePath, String fileName, String fileType, long fileSize, Timestamp uploadDate) {
+    public Media_Post(int postId, String filePath, String fileName, String fileType, long fileSize, Timestamp uploadDate) {
         this.postId = postId;
         this.filePath = filePath;
         this.fileName = fileName;
@@ -35,7 +35,7 @@ public class Media {
         this.uploadDate = uploadDate;
     }
 
-    public Media(int postId, String filePath, String fileName, String fileType, long fileSize) {
+    public Media_Post(int postId, String filePath, String fileName, String fileType, long fileSize) {
         this.postId = postId;
         this.filePath = filePath;
         this.fileName = fileName;
