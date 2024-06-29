@@ -15,7 +15,7 @@ public class MediaOfPost_DataBase {
     }
     private void createMediaTable() throws SQLException {
 
-        PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Media("
+        PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS MediaOfPost("
         + "id INT AUTO_INCREMENT PRIMARY KEY,"
         + "post_id INT NOT NULL,"
         + "file_path VARCHAR(255) NOT NULL,"

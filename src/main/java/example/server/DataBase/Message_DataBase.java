@@ -71,7 +71,7 @@ public class Message_DataBase {
         preparedStatement.setString(1, message.getSender());
         preparedStatement.setString(2, message.getReceiver());
         preparedStatement.setString(3, message.getText());
-        preparedStatement.setString(4, message.getMediaUrl());
+        preparedStatement.setTimestamp(4, message.getTimestamp());
         ResultSet resultSet = preparedStatement.executeQuery();
         Message particularMessage = null;
         if (resultSet.next()) {
