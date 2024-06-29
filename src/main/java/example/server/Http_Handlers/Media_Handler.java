@@ -7,7 +7,6 @@ import example.server.Server;
 import example.server.Utilities.Authorization_Util;
 import example.server.models.Media;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -57,8 +56,8 @@ public class Media_Handler {
                         new File(storeFile.getParent()).mkdirs();
                         item.write(storeFile);
 
-                        Media media = new Media( postId, filePath, fileName, item.getContentType(), item.getSize());
-                        Media_Controller.insertMedia(media);
+                        Media media_post = new Media( postId, filePath, fileName, item.getContentType(), item.getSize());
+                        Media_Controller.insertMedia(media_post);
                         Server.sendResponse(exchange,200,"File uploaded successfully: " + filePath);
                     }
                 }
@@ -95,14 +94,14 @@ public class Media_Handler {
         String requestedFile = url[3];
         int postId = Integer.parseInt(url[2]);
 
-        Media media = null;
+        Media media_post = null;
         try {
-            media = Media_Controller.getMedia(requestedFile,postId);
-            if (media == null) {
+            media_post = Media_Controller.getMedia(requestedFile,postId);
+            if (media_post == null) {
                 Server.sendResponse(exchange, 404, "Media not found in Database");
             }
             else {
-                String filePath = media.getFilePath();
+                String filePath = media_post.getFilePath();
                 File file = new File(filePath);
                 if (file.exists() && !file.isDirectory()) {
                     String mimeType = Files.probeContentType(Paths.get(filePath));
@@ -161,7 +160,7 @@ public class Media_Handler {
     }
 
 
-    public static void deletMediasOfPost(HttpExchange exchange) throws IOException {
+    public static void deleteMediasOfPost(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
