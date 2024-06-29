@@ -44,15 +44,15 @@ public class Router {
         server.put("/connect/{sender}/accept",Connect_Handler::AcceptRequest);
         server.get("/connect/requests",Connect_Handler::getNotAcceptedConnectRequest);
 
-        server.post("/media/upload/{postId}", MediaOfPost_Handler::UploadMedia);
-        server.get("/media/get/{postId}/{file_name}", MediaOfPost_Handler::RetrieveMedia);
-        server.delete("/media/delete/{postId}/{file_name}", MediaOfPost_Handler::deleteMedia);
-        server.delete("/media/delete/{postId}", MediaOfPost_Handler::deleteMediasOfPost);
+        server.post("/media/upload/{postId}", Media_Handler::UploadMedia);
+        server.get("/media/get/{postId}/{file_name}", Media_Handler::RetrieveMedia);
+        server.delete("/media/delete/{postId}/{file_name}", Media_Handler::deleteMedia);
+        server.delete("/media/delete/{postId}", Media_Handler::deleteMediasOfPost);
 
-        server.post("/chat/send",Chatroom_Handler::whichMessageHandler);
-        server.post("/chat/upload",Chatroom_Handler::MediaUpload);
-        server.get("/messages/{EmailOfUser1}/{EmailOfUser2}",Chatroom_Handler::RetrieveMessages);
-        server.get("/medias/{EmailOfUser1}/{EmailOfUser2}",Chatroom_Handler::RetrieveMedias);
+        server.post("/message", PrivateChat_Handler::messageUpload);
+        server.get("/chat/{EmailOfUser1}/{EmailOfUser2}", PrivateChat_Handler::RetrieveMessages);
+        server.delete("messages/delete/{messageId}", PrivateChat_Handler::deleteMessage);
+        server.delete("/deleteHistory", PrivateChat_Handler::deleteHistory);
 
     }
 

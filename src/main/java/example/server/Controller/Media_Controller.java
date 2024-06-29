@@ -1,24 +1,24 @@
 package example.server.Controller;
 
-import example.server.DataBase.MediaOfPost_DataBase;
-import example.server.models.Media_Post;
+import example.server.DataBase.Media_DataBase;
+import example.server.models.Media;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Media_Controller {
-    private static MediaOfPost_DataBase mediaDataBase;
+    private static Media_DataBase mediaDataBase;
 
     static {
         try {
-            mediaDataBase = new MediaOfPost_DataBase();
+            mediaDataBase = new Media_DataBase();
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void insertMedia(Media_Post media) throws SQLException {
+    public static void insertMedia(Media media) throws SQLException {
         mediaDataBase.insertMedia(media);
     }
 
@@ -26,7 +26,7 @@ public class Media_Controller {
         mediaDataBase.deleteMedia(filename,postId);
     }
 
-    public static void deleteMedia(Media_Post media) throws SQLException {
+    public static void deleteMedia(Media media) throws SQLException {
         mediaDataBase.deleteMedia(media);
     }
 
@@ -47,19 +47,19 @@ public class Media_Controller {
         mediaDataBase.deleteAllMedias();
     }
 
-    public static Media_Post getMedia(int id) throws SQLException {
+    public static Media getMedia(int id) throws SQLException {
         return mediaDataBase.getMedia(id);
     }
 
-    public static Media_Post getMedia(String fileName , int postId) throws SQLException {
+    public static Media getMedia(String fileName , int postId) throws SQLException {
         return mediaDataBase.getMedia(fileName , postId);
     }
 
-    public static ArrayList<Media_Post> getMediasOfPost(int postId) throws SQLException {
+    public static ArrayList<Media> getMediasOfPost(int postId) throws SQLException {
         return mediaDataBase.getMediaOfPost(postId);
     }
 
-    public static ArrayList<Media_Post> getAllMedias() throws SQLException {
+    public static ArrayList<Media> getAllMedias() throws SQLException {
         return mediaDataBase.getAllMedia();
     }
 

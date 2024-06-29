@@ -5,22 +5,22 @@ import example.server.models.Message;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Message_DataBase {
+public class PrivateChat_DataBase {
     private final Connection connection;
 
-    public Message_DataBase() throws SQLException {
+    public PrivateChat_DataBase() throws SQLException {
         connection = SQLConnection.getConnection();
         CreateMessageTable();
     }
 
     private void CreateMessageTable() throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Message("
+        PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS PrivateChat("
                 +"id INT AUTO_INCREMENT PRIMARY KEY,"
                 +"Sender VARCHAR(255) NOT NULL,"
                 +"Reciever VARCHAR(255) NOT NULL,"
-                +"message VARCHAR(1900) NOT NULL,"
+                +"message VARCHAR(1900),"
                 +"created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
-                +"mediaUrl VARCHAR(255)"
+                +"mediaUrl VARCHAR(255),"
                 +"FOREIGN KEY(Sender) REFERENCES users (email) ON DELETE CASCADE,"
                 +"FOREIGN KEY(Receiver) REFERENCES users (email) ON DELETE CASCADE"
                 + ")");
@@ -29,7 +29,7 @@ public class Message_DataBase {
     }
 
     public void insertMessage(Message message) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Message(Sender, Reciever, message,mediaUrl) VALUES(?,?,?,?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO PrivateChat(Sender, Reciever, message,mediaUrl) VALUES(?,?,?,?)");
         preparedStatement.setString(1, message.getSender());
         preparedStatement.setString(2, message.getReceiver());
         preparedStatement.setString(3,message.getText());
@@ -39,20 +39,27 @@ public class Message_DataBase {
     }
 
     public void editMessage(Message message) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Message SET message=?, mediaUrl=? WHERE id=?");
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE PrivateChat SET message=?, mediaUrl=? WHERE id=?");
         preparedStatement.setString(1, message.getText());
         preparedStatement.setString(2, message.getMediaUrl());
         preparedStatement.setInt(3, message.getId());
         preparedStatement.executeUpdate();
     }
 
+    public void deleteMessage(int id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM PrivateChat WHERE id=?");
+        preparedStatement.setInt(1, id);
+        preparedStatement.executeUpdate();
+
+    }
+
     public void deleteMessage(Message message) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Message WHERE id=?");
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM PrivateChat WHERE id=?");
         preparedStatement.setInt(1, message.getId());
         preparedStatement.executeUpdate();
     }
-    public void deleteMessagesOfTwoPersons(String person1 , String person2) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Message WHERE Sender=? AND Receiver=? OR Sender=? AND Receiver=?");
+    public void deleteHistory(String person1 , String person2) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM PrivateChat WHERE (Sender=? AND Receiver=?) OR (Sender=? AND Receiver=?)");
         preparedStatement.setString(1, person1);
         preparedStatement.setString(2, person2);
         preparedStatement.setString(3, person2);
@@ -61,17 +68,18 @@ public class Message_DataBase {
     }
 
     public void deleteAllMessages() throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Message");
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM PrivateChat");
         preparedStatement.executeUpdate();
     }
 
     public Message getParticularMessage(Message message) throws SQLException {
 
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Message WHERE Sender=? AND Receiver=? AND message=? AND created_at=?");
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PrivateChat WHERE Sender=? AND Receiver=? AND message=? AND mediaUrl=? AND created_at=?");
         preparedStatement.setString(1, message.getSender());
         preparedStatement.setString(2, message.getReceiver());
         preparedStatement.setString(3, message.getText());
-        preparedStatement.setTimestamp(4, message.getTimestamp());
+        preparedStatement.setString(4, message.getMediaUrl());
+        preparedStatement.setTimestamp(5, message.getTimestamp());
         ResultSet resultSet = preparedStatement.executeQuery();
         Message particularMessage = null;
         if (resultSet.next()) {
@@ -88,7 +96,7 @@ public class Message_DataBase {
     }
 
     public Message getParticularMessage(int id) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Message WHERE id=?");
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PrivateChat WHERE id=?");
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         Message particularMessage = null;
@@ -104,8 +112,8 @@ public class Message_DataBase {
         return particularMessage;
     }
 
-    public ArrayList<Message> getMessagesOfTwoPerson(String person1,String person2) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Message WHERE (Sender=? AND Receiver=?) OR (Sender=? AND Receiver=?) ORDER BY created_at ");
+    public ArrayList<Message> getHistory(String person1,String person2) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PrivateChat WHERE (Sender=? AND Receiver=?) OR (Sender=? AND Receiver=?) ORDER BY created_at ");
         preparedStatement.setString(1, person1);
         preparedStatement.setString(2, person2);
         preparedStatement.setString(3, person2);
@@ -119,6 +127,24 @@ public class Message_DataBase {
             String text = resultSet.getString("message");
             String mediaUrl = resultSet.getString("mediaUrl");
             Timestamp created_at = resultSet.getTimestamp("created_at");
+            messages.add(new Message(id,text,sender,receiver,created_at,mediaUrl));
+        }
+        return messages;
+
+    }
+
+    public ArrayList<Message> getNewMessages(String sender, String receiver , Timestamp lastCheck) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM PrivateChat WHERE Sender=? AND Receiver=? AND created_at>? ORDER BY created_at ");
+        preparedStatement.setString(1, sender);
+        preparedStatement.setString(2, receiver);
+        preparedStatement.setTimestamp(3, lastCheck);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        ArrayList<Message> messages = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String text = resultSet.getString("message");
+            Timestamp created_at = resultSet.getTimestamp("created_at");
+            String mediaUrl = resultSet.getString("mediaUrl");
             messages.add(new Message(id,text,sender,receiver,created_at,mediaUrl));
         }
         return messages;
