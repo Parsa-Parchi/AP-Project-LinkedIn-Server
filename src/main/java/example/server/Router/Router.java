@@ -49,6 +49,11 @@ public class Router {
         server.delete("/media/delete/{postId}/{file_name}", MediaOfPost_Handler::deleteMedia);
         server.delete("/media/delete/{postId}", MediaOfPost_Handler::deleteMediasOfPost);
 
+        server.post("/chat/send",Chatroom_Handler::whichMessageHandler);
+        server.post("/chat/upload",Chatroom_Handler::MediaUpload);
+        server.get("/messages/{EmailOfUser1}/{EmailOfUser2}",Chatroom_Handler::RetrieveMessages);
+        server.get("/medias/{EmailOfUser1}/{EmailOfUser2}",Chatroom_Handler::RetrieveMedias);
+
     }
 
 }

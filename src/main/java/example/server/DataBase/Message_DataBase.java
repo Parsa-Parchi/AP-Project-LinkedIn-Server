@@ -105,7 +105,7 @@ public class Message_DataBase {
     }
 
     public ArrayList<Message> getMessagesOfTwoPerson(String person1,String person2) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Message WHERE Sender=? AND Receiver=? OR Sender=? AND Receiver=?");
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Message WHERE (Sender=? AND Receiver=?) OR (Sender=? AND Receiver=?) ORDER BY created_at ");
         preparedStatement.setString(1, person1);
         preparedStatement.setString(2, person2);
         preparedStatement.setString(3, person2);

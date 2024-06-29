@@ -42,9 +42,13 @@ public class Server  {
     }
 
     public static void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
-        exchange.sendResponseHeaders(statusCode, response.length());
-        try (OutputStream outputStream = exchange.getResponseBody()) {
-            outputStream.write(response.getBytes());
+        if (response == null || response.isEmpty()) {
+            exchange.sendResponseHeaders(statusCode, -1); // No response body
+        } else {
+            exchange.sendResponseHeaders(statusCode, response.length());
+            try (OutputStream outputStream = exchange.getResponseBody()) {
+                outputStream.write(response.getBytes());
+            }
         }
     }
 
