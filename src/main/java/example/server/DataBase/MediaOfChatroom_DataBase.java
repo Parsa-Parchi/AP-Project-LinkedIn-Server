@@ -88,7 +88,7 @@ public class MediaOfChatroom_DataBase {
         return mediaChatroom;
     }
 
-    public ArrayList<Media_Chatroom> getMediasOfTwpPerson(String person1 ,String  person2) throws SQLException {
+    public ArrayList<Media_Chatroom> getMediasOfTwoPerson(String person1 ,String  person2) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM MediaOfChatroom WHERE Sender=? AND Receiver=? OR Sender=? AND Receiver=?");
         preparedStatement.setString(1, person1);
         preparedStatement.setString(2, person2);
