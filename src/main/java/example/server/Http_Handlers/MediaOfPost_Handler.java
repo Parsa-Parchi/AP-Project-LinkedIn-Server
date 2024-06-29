@@ -160,7 +160,7 @@ public class MediaOfPost_Handler {
     }
 
 
-    public static void deletMediasOfPost(HttpExchange exchange) throws IOException {
+    public static void deleteMediasOfPost(HttpExchange exchange) throws IOException {
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
