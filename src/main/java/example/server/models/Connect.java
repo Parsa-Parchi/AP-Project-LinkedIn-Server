@@ -1,18 +1,22 @@
 package example.server.models;
 
+import java.sql.Timestamp;
+
 public class Connect {
     private int id;
     private String Request_Sender;
     private String Request_Receiver;
     private boolean accepted;
     private String notes;
+    private Timestamp request_date;
 
-    public Connect(int id, String request_Sender, String request_Receiver, boolean accepted , String notes)  {
+    public Connect(int id, String request_Sender, String request_Receiver, boolean accepted , String notes, Timestamp request_date)  {
         this.id = id;
         Request_Sender = request_Sender;
         Request_Receiver = request_Receiver;
         this.accepted = accepted;
         this.notes = notes;
+        this.request_date = request_date;
     }
 
     public String getNotes() {

@@ -37,12 +37,13 @@ public class Router {
         server.put("/posts/comment/update",PostHandler::postUpdateComment); // besides this "/posts/comment/update" route send json object from comment class that has message and id
         server.put("/posts/update",PostHandler::postUpdate); // besides this "/posts/update" route send json object from post Class that has postId
         server.get("/hashtag/search/posts",PostHandler::searchPostByHashtag); // beside this "/hashtag/search/posts" route send json object from hashtag Class that include Hashtag string to be searched
-        server.post("/follow/{email}", Follow_Handler::FollowUser);
-        server.delete("/unfollow/{email}", Follow_Handler::UnFollowUser);
+        server.post("/follow", Follow_Handler::FollowUser); // after this route "/follow" put email of user that have to be followed
+        server.delete("/unfollow", Follow_Handler::UnFollowUser); // after this route "/unfollow" put email of user that have to be unfollowed
         server.get("/followers", Follow_Handler::getFollowers);
         server.get("/followings", Follow_Handler::getFollowing);
-        server.post("/connect/{receiver}/request",Connect_Handler::ConnectRequest);
-        server.put("/connect/{sender}/accept",Connect_Handler::AcceptRequest);
+        server.post("/connect/request",Connect_Handler::ConnectRequest); // besides this route send json of connect object including receiver email
+        server.put("/connect/accept",Connect_Handler::AcceptRequest); //after this route put email of sender to be accepted
+        server.delete("/connect/delete/request",Connect_Handler::AcceptRequest); // besides this route send json of connect object including receiver email
         server.get("/connect/requests",Connect_Handler::getNotAcceptedConnectRequest);
 
         server.post("/media/upload/{postId}", Media_Handler::UploadMedia);

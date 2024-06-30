@@ -118,6 +118,17 @@ public class Follow_DataBase {
 
     }
 
+    public boolean ExistFollow(Follow follow) throws SQLException{
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM follows WHERE follower = ? AND followed = ?");
+        statement.setString(1, follow.getFollower());
+        statement.setString(2, follow.getFollowed());
+        ResultSet resultSet = statement.executeQuery();
+        if(resultSet.next()){
+            return true;
+        }
+        return false;
+    }
+
     public ArrayList<String> getFollowersOfUser(String email) throws SQLException{
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM follows WHERE followed = ?");
         statement.setString(1, email);

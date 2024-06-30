@@ -28,6 +28,9 @@ public class Follow_Controller {
     public static void deleteFollow(Follow follow) throws SQLException {
         followDataBase.deleteFollow(follow);
     }
+    public static boolean ExistFollow(Follow follow) throws SQLException {
+        return followDataBase.ExistFollow(follow);
+    }
 
     public static void  deleteFollowById(int id) throws SQLException {
         followDataBase.deleteFollow(id);

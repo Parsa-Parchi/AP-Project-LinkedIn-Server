@@ -30,6 +30,14 @@ public class Connect_Controller {
         connectDataBase.updateConnect(conn);
     }
 
+    public static void deleteRequest(Connect conn) throws SQLException {
+        connectDataBase.deleteRequest(conn);
+    }
+
+    public static boolean ExistRequest(Connect conn) throws SQLException {
+        return connectDataBase.ExistRequest(conn);
+    }
+
     public static void deleteConnect(int id) throws SQLException {
         connectDataBase.deleteConnect(id);
     }
@@ -79,8 +87,8 @@ public class Connect_Controller {
     public static ArrayList<Connect> getAcceptedConnectionsOfSender(String sender ,boolean accepted) throws SQLException{
         return connectDataBase.getAcceptedConnectionsOfSender(sender,accepted);
     }
-    public static ArrayList<Connect> getAcceptedConnectionsOfReceiver(String receiver ,boolean accepted) throws SQLException{
-        return connectDataBase.getAcceptedConnectionsOfReceiver(receiver,accepted);
+    public static ArrayList<Connect> getConnectionsOfReceiverByBoolean(String receiver ,boolean accepted) throws SQLException{
+        return connectDataBase.getConnectionsOfReceiverByBoolean(receiver,accepted);
     }
 
 }

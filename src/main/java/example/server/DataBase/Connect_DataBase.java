@@ -1,9 +1,6 @@
 package example.server.DataBase;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Connection;
+import java.sql.*;
 import java.util.ArrayList;
 
 import example.server.models.Connect;
@@ -23,8 +20,9 @@ public class Connect_DataBase {
                 + "Request_Receiver VARCHAR(255) NOT NULL,"
                 + "notes VARCHAR(500) NOT NULL,"
                 + "accepted BOOLEAN DEFAULT FALSE,"
+                + "requestDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                 + "FOREIGN KEY (Request_Sender) REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE,"
-                + "FOREIGN KEY (accepted BOOLEAN) REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE"
+                + "FOREIGN KEY (Request_Receiver) REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
         statement.executeUpdate();
@@ -33,30 +31,11 @@ public class Connect_DataBase {
     public void insertConnect(Connect conn) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO connections(Request_Sender, Request_Receiver , notes) VALUES (?, ?, ?)");
 
-        statement.setString(1,conn.getRequest_Receiver());
-        statement.setString(2,conn.getRequest_Sender());
+        statement.setString(1,conn.getRequest_Sender());
+        statement.setString(2,conn.getRequest_Receiver());
         statement.setString(3,conn.getNotes());
         statement.executeUpdate();
 
-        if(conn.isAccepted())
-        {
-            PreparedStatement statement1 = connection.prepareStatement("UPDATE users SET connections = connections + 1 WHERE email = ?");
-            statement1.setString(1,conn.getRequest_Receiver());
-            statement1.executeUpdate();
-
-            PreparedStatement statement2 = connection.prepareStatement("UPDATE users SET connections = connections + 1 WHERE email = ?");
-            statement2.setString(1,conn.getRequest_Sender());
-            statement2.executeUpdate();
-
-            PreparedStatement statement3 = connection.prepareStatement("UPDATE users SET followers = followers + 1 AND followings = followings + 1 WHERE email = ?");
-            statement3.setString(1,conn.getRequest_Receiver());
-            statement3.executeUpdate();
-
-            PreparedStatement statement4 = connection.prepareStatement("UPDATE users SET followers = followers + 1 AND followings = followings + 1 WHERE email = ?");
-            statement4.setString(1,conn.getRequest_Receiver());
-            statement4.executeUpdate();
-
-        }
     }
 
     public void updateConnect(Connect connect) throws SQLException {
@@ -130,6 +109,24 @@ public class Connect_DataBase {
             statement5.setString(1,conn.getRequest_Receiver());
             statement5.executeUpdate();
         }
+    }
+    public void deleteRequest(Connect conn) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM connections WHERE Request_Sender = ? AND Request_Receiver = ? AND accepted = FALSE ");
+        statement.setString(1,conn.getRequest_Sender());
+        statement.setString(2,conn.getRequest_Receiver());
+        statement.executeUpdate();
+
+    }
+
+    public boolean ExistRequest(Connect conn) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM connections WHERE Request_Sender = ? AND Request_Receiver = ? AND accepted = FALSE");
+        preparedStatement.setString(1,conn.getRequest_Sender());
+        preparedStatement.setString(2,conn.getRequest_Receiver());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if(resultSet.next()) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -335,13 +332,19 @@ public class Connect_DataBase {
         }
         return connects;
     }
-    public ArrayList<Connect> getAcceptedConnectionsOfReceiver(String receiver ,boolean accepted) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM connections WHERE Request_Receiver = ?");
+    public ArrayList<Connect> getConnectionsOfReceiverByBoolean(String receiver ,boolean accepted) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM connections WHERE Request_Receiver = ? AND accepted = ? ORDER BY requestDate");
         statement.setString(1,receiver);
+        statement.setBoolean(2,accepted);
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Connect> connects = new ArrayList<>();
         while (resultSet.next()) {
-            Connect connect = new Connect(resultSet.getString("Request_Receiver"),resultSet.getString("Request_Sender"),resultSet.getString("notes"));
+            int id = resultSet.getInt("id");
+            String Request_Receiver = resultSet.getString("Request_Receiver");
+            String Request_Sender = resultSet.getString("Request_Sender");
+            String notes = resultSet.getString("notes");
+            Timestamp requestDate = resultSet.getTimestamp("requestDate");
+            Connect connect = new Connect(id,Request_Sender,Request_Receiver,false,notes,requestDate);
             connects.add(connect);
         }
         return connects;
