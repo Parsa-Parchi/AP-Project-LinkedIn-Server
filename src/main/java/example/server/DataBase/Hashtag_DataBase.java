@@ -20,7 +20,7 @@ public class Hashtag_DataBase {
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
                 + "post_id INT NOT NULL,"
                 + "hashtag VARCHAR(50) NOT NULL,"
-                + "FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE"
+                + "FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
         preparedStatement.executeUpdate();

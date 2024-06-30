@@ -27,7 +27,7 @@ public class ContactInformation_DataBase {
                 + "birth_date DATE,"
                 + "fast_connect VARCHAR(40),"
                 + "access_level VARCHAR(40),"
-                + "FOREIGN KEY (email) REFERENCES users (email) ON DELETE CASCADE"
+                + "FOREIGN KEY (email) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
         statement.executeUpdate();
@@ -41,22 +41,22 @@ public class ContactInformation_DataBase {
         statement.setString(4,contact.getHome_PhoneNumber());
         statement.setString(5,contact.getWorkplace_PhoneNumber());
         statement.setString(6,contact.getAddress());
-        statement.setDate(7, (Date) contact.getBirthDate());
+        statement.setDate(7, contact.getBirthDate());
         statement.setString(8,contact.getFastConnect());
         statement.setString(9,contact.getAccess_level());
         statement.executeUpdate();
     }
 
     public void updateContact(ContactInformation contact) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("UPDATE contact"
-                + "SET view_link = ?, Mobile_PhoneNumber = ?, Home_PhoneNumber = ?, Workplace_PhoneNumber = ?, address = ?, birth_date = ?, fast_connect = ? , access_level = ?,WHERE email = ?");
+        PreparedStatement statement = connection.prepareStatement("UPDATE contact "
+                + "SET view_link = ?, Mobile_PhoneNumber = ?, Home_PhoneNumber = ?, Workplace_PhoneNumber = ?, address = ?, birth_date = ?, fast_connect = ? , access_level = ? WHERE email = ?");
 
         statement.setString(1, contact.getViewLink());
         statement.setString(2, contact.getMobile_PhoneNumber());
         statement.setString(3, contact.getHome_PhoneNumber());
         statement.setString(4, contact.getWorkplace_PhoneNumber());
         statement.setString(5, contact.getAddress());
-        statement.setDate(6, (Date) contact.getBirthDate());
+        statement.setDate(6, contact.getBirthDate());
         statement.setString(7, contact.getFastConnect());
         statement.setString(8, contact.getAccess_level());
         statement.setString(9, contact.getEmail());

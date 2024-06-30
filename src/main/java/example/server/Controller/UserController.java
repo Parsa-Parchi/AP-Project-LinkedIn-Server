@@ -25,7 +25,7 @@ public class UserController {
         }
     }
 
-    public static void insertUser(User user) throws SQLException {
+    public static void insertUser(User user) throws Exception {
         boolean ValidationOfUser = ValidUser(user);
         if(ValidationOfUser){
             user_db.insertUser(user);
@@ -39,12 +39,33 @@ public class UserController {
     }
 
     public static void updateUser(User user) throws SQLException {
-        boolean ValidationOfUser = ValidUser(user);
-        if(ValidationOfUser){
-            user_db.updateUser(user);
-        }
-        else
-            throw new IllegalArgumentException("Invalid data for user !");
+            boolean ValidationOfUser = ValidUser(user);
+            if (ValidationOfUser) {
+                User user1 = user_db.getUserById(user.getId());
+                if(user.getEmail()!=null)
+                    user1.setEmail(user.getEmail());
+                if(user.getFirstName()!=null)
+                    user1.setFirstName(user.getFirstName());
+                if(user.getLastName()!=null)
+                    user1.setLastName(user.getLastName());
+                if(user.getPassword()!=null)
+                    user1.setPassword(user.getPassword());
+                if(user.getAdditionalName()!=null)
+                    user1.setAdditionalName(user.getAdditionalName());
+                if(user.getAvatar_url()!=null)
+                    user1.setAvatar_url(user.getAvatar_url());
+                if(user.getBackground_url()!=null)
+                    user1.setBackground_url(user.getBackground_url());
+                if(user.getCity()!=null)
+                    user1.setCity(user.getCity());
+                if(user.getCountry()!=null)
+                    user1.setCountry(user.getCountry());
+                if (user.getHeadline()!=null)
+                    user1.setHeadline(user.getHeadline());
+                user_db.updateUser(user1);
+            } else
+                throw new IllegalArgumentException("Invalid data for user !");
+
     }
 
     public static void deleteUserByEmail(User user) throws SQLException {
@@ -72,8 +93,20 @@ public class UserController {
     }
 
     public static boolean ValidUser(User user) throws SQLException {
-        return ValidName(user.getFirstName()) && ValidName(user.getLastName())
-                && ValidEmail(user.getEmail()) && ValidPassword(user.getPassword());
+        boolean Valid = true;
+        if(user.getEmail()!=null){
+            Valid = Valid && ValidEmail(user.getEmail());
+        }
+        if (user.getPassword()!=null){
+            Valid = Valid && ValidPassword(user.getPassword());
+        }
+        if(user.getFirstName()!=null){
+            Valid = Valid && ValidName(user.getFirstName());
+        }
+        if(user.getLastName()!=null){
+            Valid = Valid && ValidName(user.getLastName());
+        }
+        return Valid;
     }
 
 

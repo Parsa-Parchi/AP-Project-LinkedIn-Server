@@ -23,7 +23,7 @@ public class Post_DataBase {
                 + "created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                 + "likes INT NOT NULL DEFAULT 0,"
                 + "comments INT NOT NULL DEFAULT 0,"
-                + "FOREIGN KEY(email) REFERENCES users (email) ON DELETE CASCADE"
+                + "FOREIGN KEY(email) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
         statement.executeUpdate();

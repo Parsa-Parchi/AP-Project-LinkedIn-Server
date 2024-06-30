@@ -23,7 +23,19 @@ public class Skill_Controller {
     }
 
     public static void updateSkill(Skill skill) throws SQLException {
-        skillDataBase.updateSkill(skill);
+        Skill Nskill = skillDataBase.getSkill(skill.getEmail());
+        if(skill.getSkill_1()!= null)
+            Nskill.setSkill_1(skill.getSkill_1());
+        if(skill.getSkill_2()!= null)
+            Nskill.setSkill_2(skill.getSkill_2());
+        if(skill.getSkill_3()!= null)
+            Nskill.setSkill_3(skill.getSkill_3());
+        if(skill.getSkill_4()!= null)
+            Nskill.setSkill_4(skill.getSkill_4());
+        if(skill.getSkill_5()!= null)
+            Nskill.setSkill_5(skill.getSkill_5());
+
+        skillDataBase.updateSkill(Nskill);
     }
 
     public static void deleteSkill(Skill skill) throws SQLException {

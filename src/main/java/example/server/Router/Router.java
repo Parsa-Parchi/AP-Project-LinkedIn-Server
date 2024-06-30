@@ -9,7 +9,7 @@ public class Router {
     public static void addRoute(Server server) {
 
         server.post("/signup", UserHandler::SignUpHandler);
-        server.post("/login", UserHandler::LogInHandler);
+        server.get("/login", UserHandler::LogInHandler);
         server.get("/user",UserHandler::retrieveUserHandler);
         server.get("/users",UserHandler::retrieveAllUserHandler);
         server.get("/user/skill",UserHandler::getSkillOfUserHandler);
@@ -51,7 +51,7 @@ public class Router {
 
         server.post("/message", PrivateChat_Handler::messageUpload);
         server.get("/chat/{EmailOfUser1}/{EmailOfUser2}", PrivateChat_Handler::RetrieveMessages);
-        server.delete("messages/delete/{messageId}", PrivateChat_Handler::deleteMessage);
+        server.delete("/messages/delete/{messageId}", PrivateChat_Handler::deleteMessage);
         server.delete("/deleteHistory", PrivateChat_Handler::deleteHistory);
 
     }

@@ -23,8 +23,8 @@ public class Connect_DataBase {
                 + "Request_Receiver VARCHAR(255) NOT NULL,"
                 + "notes VARCHAR(500) NOT NULL,"
                 + "accepted BOOLEAN DEFAULT FALSE,"
-                + "FOREIGN KEY (Request_Sender) REFERENCES users(email) ON DELETE CASCADE,"
-                + "FOREIGN KEY (accepted BOOLEAN) REFERENCES users(email) ON DELETE CASCADE"
+                + "FOREIGN KEY (Request_Sender) REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE,"
+                + "FOREIGN KEY (accepted BOOLEAN) REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
         statement.executeUpdate();

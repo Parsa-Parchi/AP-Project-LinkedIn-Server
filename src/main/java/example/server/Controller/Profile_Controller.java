@@ -16,7 +16,7 @@ public class Profile_Controller {
         UserController.updateUser(user);
     }
 
-    public static void addEducation(Education education) throws SQLException {
+    public static void addEducation(Education education) throws Exception {
         Education_Controller.insertEducation(education);
     }
 

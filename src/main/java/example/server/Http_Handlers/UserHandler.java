@@ -1,5 +1,6 @@
 package example.server.Http_Handlers;
 
+import com.google.gson.GsonBuilder;
 import example.server.Controller.*;
 import example.server.Server;
 import example.server.Utilities.Authorization_Util;
@@ -19,15 +20,25 @@ import java.util.HashMap;
 
 
 public class UserHandler {
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd")
+            .create();
 
     public static void SignUpHandler(HttpExchange exchange) throws IOException {
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         User user = gson.fromJson(requestBody, User.class);
         try
         {
-            UserController.insertUser(user);
-            Server.sendResponse(exchange, 200, "The User was successfully added to the Database");
+            User user2 = UserController.getUserByEmail(user.getEmail());
+            if(user2 == null) {
+                UserController.insertUser(user);
+                String token = jwt_Util.generateToken(user.getEmail());
+                HashMap<String, String> responseHashMap = new HashMap<>();
+                responseHashMap.put("ResponseToken", token);
+                Server.sendResponse(exchange, 200, gson.toJson(responseHashMap));
+            }
+            else
+                Server.sendResponse(exchange, 409, "The User with this email already exists");
         }
 
         catch (SQLException e)
@@ -167,7 +178,7 @@ public class UserHandler {
         String EmailOfToken = jwt_Util.parseToken(token);
 
         try {
-            ContactInformation contactInformation = ContactInfo_Controller.getContactInfoOfUser(EmailOfToken);
+            ContactInformation contactInformation = ContactInfo_Controller.getContactInfoOfUser("ParsaPrc78653@gmail.com");
             if(contactInformation == null)
                 Server.sendResponse(exchange, 404, gson.toJson(Collections.singletonMap("error", "ContactInformation not found")));
             else
@@ -193,6 +204,7 @@ public class UserHandler {
             return;
         }
         String EmailOfToken = jwt_Util.parseToken(token);
+
 
         try {
             ArrayList<Education> educations = Education_Controller.getAllEducationsOfUser(EmailOfToken);

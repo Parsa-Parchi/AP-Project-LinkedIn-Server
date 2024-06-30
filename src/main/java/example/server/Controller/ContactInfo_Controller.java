@@ -25,8 +25,27 @@ public class ContactInfo_Controller {
     }
 
     public static void updateContactInfo(ContactInformation contactInformation) throws SQLException {
-        if(isValid(contactInformation))
-            contact_info_db.updateContact(contactInformation);
+        if(isValid(contactInformation)) {
+            ContactInformation contactInformation1 = contact_info_db.getContactInfoOfUser(contactInformation.getEmail());
+            if(contactInformation.getWorkplace_PhoneNumber()!=null)
+                contactInformation1.setWorkplace_PhoneNumber(contactInformation.getWorkplace_PhoneNumber());
+            if(contactInformation.getHome_PhoneNumber()!=null)
+                contactInformation1.setHome_PhoneNumber(contactInformation.getHome_PhoneNumber());
+            if(contactInformation.getMobile_PhoneNumber()!=null)
+                contactInformation1.setMobile_PhoneNumber(contactInformation.getMobile_PhoneNumber());
+            if(contactInformation.getAccess_level()!=null)
+                contactInformation1.setAccess_level(contactInformation.getAccess_level());
+            if(contactInformation.getAddress()!=null)
+                contactInformation1.setAddress(contactInformation.getAddress());
+            if (contactInformation.getBirthDate()!=null)
+                contactInformation1.setBirthDate(contactInformation.getBirthDate());
+            if(contactInformation.getViewLink()!=null)
+                contactInformation1.setViewLink(contactInformation.getViewLink());
+            if(contactInformation.getFastConnect()!=null)
+                contactInformation1.setFastConnect(contactInformation.getFastConnect());
+
+            contact_info_db.updateContact(contactInformation1);
+        }
         else
             throw new IllegalArgumentException("Contact information is not valid : view link is null or phone number is not valid " );
     }
@@ -57,40 +76,26 @@ public class ContactInfo_Controller {
 
 
     public static boolean viewLinkValidator(String viewLink) {
-        return viewLink != null && !viewLink.isEmpty();
+        return  !viewLink.isEmpty();
     }
 
-    public static boolean Mobile_phoneNumberValidator(String phoneNumber) {
-        return phoneNumber != null && NUMBER_FORMAT.matcher(phoneNumber).matches();
-    }
-
-    public static boolean Home_phoneNumberValidator(String phoneNumber) {
-        return  NUMBER_FORMAT.matcher(phoneNumber).matches();
-    }
-
-    public static boolean Work_phoneNumberValidator(String phoneNumber) {
-        return  NUMBER_FORMAT.matcher(phoneNumber).matches();
+    public static boolean phoneNumberValidator(String phoneNumber) {
+        return   NUMBER_FORMAT.matcher(phoneNumber).matches();
     }
 
     public static boolean isValid(ContactInformation contact) {
-        if(!contact.getHome_PhoneNumber().isEmpty() && !contact.getWorkplace_PhoneNumber().isEmpty())
-        {
-            return viewLinkValidator(contact.getViewLink()) && Mobile_phoneNumberValidator(contact.getMobile_PhoneNumber())
-                    && Home_phoneNumberValidator(contact.getHome_PhoneNumber()) && Work_phoneNumberValidator(contact.getWorkplace_PhoneNumber());
-        }
 
-        else if(contact.getHome_PhoneNumber().isEmpty() && !contact.getWorkplace_PhoneNumber().isEmpty())
-        {
-            return viewLinkValidator(contact.getViewLink()) && Mobile_phoneNumberValidator(contact.getMobile_PhoneNumber())
-                     && Work_phoneNumberValidator(contact.getWorkplace_PhoneNumber());
-        }
+        boolean valid = true;
+        if(contact.getWorkplace_PhoneNumber()!=null)
+            valid =  phoneNumberValidator(contact.getWorkplace_PhoneNumber());
+        if(contact.getHome_PhoneNumber()!=null)
+            valid = valid && phoneNumberValidator(contact.getHome_PhoneNumber());
+        if(contact.getMobile_PhoneNumber()!=null)
+            valid = valid && phoneNumberValidator(contact.getMobile_PhoneNumber());
+        if(contact.getViewLink()!=null)
+            valid = valid && phoneNumberValidator(contact.getViewLink());
 
-        else if(contact.getWorkplace_PhoneNumber().isEmpty() && !contact.getHome_PhoneNumber().isEmpty())
-        {
-            return viewLinkValidator(contact.getViewLink()) && Mobile_phoneNumberValidator(contact.getMobile_PhoneNumber())
-                    && Home_phoneNumberValidator(contact.getHome_PhoneNumber());
-        }
-        else
-            return viewLinkValidator(contact.getViewLink()) && Mobile_phoneNumberValidator(contact.getMobile_PhoneNumber());
+        return valid;
+
     }
 }

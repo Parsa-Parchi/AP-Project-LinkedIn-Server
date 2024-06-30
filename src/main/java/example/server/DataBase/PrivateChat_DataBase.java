@@ -21,8 +21,8 @@ public class PrivateChat_DataBase {
                 +"message VARCHAR(1900),"
                 +"created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                 +"mediaUrl VARCHAR(255),"
-                +"FOREIGN KEY(Sender) REFERENCES users (email) ON DELETE CASCADE,"
-                +"FOREIGN KEY(Receiver) REFERENCES users (email) ON DELETE CASCADE"
+                +"FOREIGN KEY(Sender) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE,"
+                +"FOREIGN KEY(Receiver) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ")");
 
         preparedStatement.executeUpdate();

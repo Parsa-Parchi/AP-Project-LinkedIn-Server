@@ -1,6 +1,6 @@
 package example.server.models;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Education {
     private int id;

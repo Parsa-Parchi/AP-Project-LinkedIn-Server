@@ -16,7 +16,7 @@ public class Education_DataBase {
     public void createEducationTable() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS education ("
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
-                + "email VARCHAR(255) UNIQUE NOT NULL,"
+                + "email VARCHAR(255) NOT NULL,"
                 + "school_name VARCHAR(40) NOT NULL,"
                 + "field VARCHAR(40) NOT NULL,"
                 + "grade FLOAT NOT NULL,"
@@ -38,8 +38,8 @@ public class Education_DataBase {
         statement.setString(2, education.getSchoolName());
         statement.setString(3, education.getField());
         statement.setDouble(4, education.getGrade());
-        statement.setDate(5, (Date) education.getStartDate());
-        statement.setDate(6, (Date) education.getEndDate());
+        statement.setDate(5,  education.getStartDate());
+        statement.setDate(6,  education.getEndDate());
         statement.setString(7,education.getActivity_Community());
         statement.setString(8,education.getDescription());
         statement.executeUpdate();
@@ -49,13 +49,13 @@ public class Education_DataBase {
     public void updateEducation(Education education) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("UPDATE education "
                 + "SET school_name = ?, field = ?, grade = ?, start_date = ?, end_date = ?, Activity_Community = ?, description = ?"
-                + "WHERE email = ?");
+                + " WHERE email=?");
 
         statement.setString(1, education.getSchoolName());
         statement.setString(2, education.getField());
         statement.setDouble(3, education.getGrade());
-        statement.setDate(4, (Date) education.getStartDate());
-        statement.setDate(5, (Date) education.getEndDate());
+        statement.setDate(4, education.getStartDate());
+        statement.setDate(5, education.getEndDate());
         statement.setString(6, education.getActivity_Community());
         statement.setString(7, education.getDescription());
         statement.setString(8, education.getEmail());
@@ -82,6 +82,35 @@ public class Education_DataBase {
 
     }
 
+    public boolean ExistEducation(Education education) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM education WHERE email = ? AND field=? AND school_name=? AND start_date=?");
+        statement.setString(1, education.getEmail());
+        statement.setString(2, education.getField());
+        statement.setString(3, education.getSchoolName());
+        statement.setDate(4, education.getStartDate());
+        ResultSet resultSet = statement.executeQuery();
+        return resultSet.next();
+    }
+
+    public Education getEducation(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM education WHERE id = ?");
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            String email = resultSet.getString("email");
+            String schoolName = resultSet.getString("school_name");
+            String field = resultSet.getString("field");
+            double grade = resultSet.getDouble("grade");
+            Date startDate = resultSet.getDate("start_date");
+            Date endDate = resultSet.getDate("end_date");
+            String activity_Community = resultSet.getString("Activity_Community");
+            String description = resultSet.getString("description");
+            Education education = new Education(id,email, schoolName, field, grade, startDate, endDate, activity_Community, description);
+            return education;
+        }
+        return null;
+    }
+
     public ArrayList<Education> getAllEducations() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM education");
         ResultSet resultSet = statement.executeQuery();
@@ -94,7 +123,7 @@ public class Education_DataBase {
             float grade = resultSet.getFloat("grade");
             Date startDate = resultSet.getDate("start_date");
             Date endDate = resultSet.getDate("end_date");
-            String community = resultSet.getString("community");
+            String community = resultSet.getString("Activity_Community");
             String description = resultSet.getString("description");
             String email = resultSet.getString("email");
             Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
@@ -116,7 +145,7 @@ public class Education_DataBase {
             float grade = resultSet.getFloat("grade");
             Date startDate = resultSet.getDate("start_date");
             Date endDate = resultSet.getDate("end_date");
-            String community = resultSet.getString("community");
+            String community = resultSet.getString("Activity_Community");
             String description = resultSet.getString("description");
             Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
             educations.add(education);
@@ -136,7 +165,7 @@ public class Education_DataBase {
             float grade = resultSet.getFloat("grade");
             Date startDate = resultSet.getDate("start_date");
             Date endDate = resultSet.getDate("end_date");
-            String community = resultSet.getString("community");
+            String community = resultSet.getString("Activity_Community");
             String description = resultSet.getString("description");
             Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
             educations.add(education);
@@ -158,7 +187,7 @@ public class Education_DataBase {
             float grade = resultSet.getFloat("grade");
             Date startDate = resultSet.getDate("start_date");
             Date endDate = resultSet.getDate("end_date");
-            String community = resultSet.getString("community");
+            String community = resultSet.getString("Activity_Community");
             String description = resultSet.getString("description");
             Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
             educations.add(education);
@@ -181,7 +210,7 @@ public class Education_DataBase {
             float grade = resultSet.getFloat("grade");
             Date startDate = resultSet.getDate("start_date");
             Date endDate = resultSet.getDate("end_date");
-            String community = resultSet.getString("community");
+            String community = resultSet.getString("Activity_Community");
             String description = resultSet.getString("description");
             Education education = new Education(id, email, schoolName, field, grade, startDate, endDate, community, description);
             educations.add(education);

@@ -24,7 +24,7 @@ public class Skill_DataBase {
                 + "skill_3 VARCHAR(40),"
                 + "skill_4 VARCHAR(40),"
                 + "skill_5 VARCHAR(40),"
-                + "FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE"
+                + "FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
         statement.executeUpdate();
     }

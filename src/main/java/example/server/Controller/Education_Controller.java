@@ -20,16 +20,38 @@ public class Education_Controller {
        }
    }
 
-    public static void insertEducation(Education education) throws SQLException {
-        if(isValid(education))
-            educationDataBase.insertEducation(education);
+    public static void insertEducation(Education education) throws Exception {
+        if(isValid(education) ) {
+            if (!educationDataBase.ExistEducation(education))
+                educationDataBase.insertEducation(education);
+            else
+                throw new IllegalArgumentException("Education already exists");
+        }
         else
             throw new IllegalArgumentException("Invalid education ! : school name or field is empty");
     }
 
     public static void updateEducation(Education education) throws SQLException {
-        if(isValid(education))
-            educationDataBase.updateEducation(education);
+        if(isValid(education)) {
+            Education education1 = educationDataBase.getEducation(education.getId());
+
+            if(education.getGrade()!=0)
+                education1.setGrade(education.getGrade());
+            if(education.getActivity_Community()!= null)
+                education1.setActivity_Community(education.getActivity_Community());
+            if(education.getDescription()!=null)
+                education1.setDescription(education.getDescription());
+            if(education.getEndDate()!=null)
+                education1.setEndDate(education.getEndDate());
+            if(education.getStartDate()!=null)
+                education1.setStartDate(education.getStartDate());
+            if(education.getField()!=null)
+                education1.setField(education.getField());
+            if(education.getSchoolName()!=null)
+                education1.setSchoolName(education.getSchoolName());
+
+            educationDataBase.updateEducation(education1);
+        }
         else
             throw new IllegalArgumentException("Invalid education ! : school name or field is empty");
     }

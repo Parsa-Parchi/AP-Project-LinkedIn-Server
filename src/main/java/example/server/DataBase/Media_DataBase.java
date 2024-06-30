@@ -23,7 +23,7 @@ public class Media_DataBase {
         + "file_type VARCHAR(50),"
         + "file_size BIGINT,"
         + "upload_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
-        + "FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE"
+        + "FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
 
