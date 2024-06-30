@@ -107,7 +107,7 @@ public class Hashtag_DataBase {
         ResultSet resultSet = preparedStatement.executeQuery();
         ArrayList<Integer> postIds = new ArrayList<>();
         while (resultSet.next()) {
-            postIds.add(resultSet.getInt("id"));
+            postIds.add(resultSet.getInt("post_id"));
 
         }
         return postIds;

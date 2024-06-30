@@ -35,6 +35,10 @@ public class Comment_Controller {
 
     }
 
+    public static String getCommenter(int id) throws SQLException {
+        return comment_dataBase.getComment(id);
+    }
+
     public static void deleteComment(int id) throws SQLException {
         comment_dataBase.deleteComment(id);
     }

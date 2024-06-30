@@ -33,9 +33,20 @@ public class Like_DataBase {
         preparedStatement.setString(2, like.getEmail());
         preparedStatement.executeUpdate();
 
-        PreparedStatement statement = connection.prepareStatement("UPDATE posts SET likes = likes + 1 WHERE post_id = ?");
+        PreparedStatement statement = connection.prepareStatement("UPDATE posts SET likes = likes + 1 WHERE id = ?");
         statement.setInt(1, like.getPostId());
         statement.executeUpdate();
+    }
+
+    public boolean ExistLike(Like like) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM likes WHERE post_id = ? AND email = ?");
+        preparedStatement.setInt(1, like.getPostId());
+        preparedStatement.setString(2, like.getEmail());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return true;
+        }
+        return false;
     }
 
     public void deleteLike(int postId ,String email) throws SQLException {
@@ -44,7 +55,7 @@ public class Like_DataBase {
         preparedStatement.setString(2, email);
         preparedStatement.executeUpdate();
 
-        PreparedStatement statement = connection.prepareStatement("UPDATE posts SET likes = likes - 1 WHERE post_id = ?");
+        PreparedStatement statement = connection.prepareStatement("UPDATE posts SET likes = likes - 1 WHERE id = ?");
         statement.setInt(1, postId);
         statement.executeUpdate();
 
@@ -56,7 +67,7 @@ public class Like_DataBase {
         preparedStatement.setInt(1, postId);
         preparedStatement.executeUpdate();
 
-        PreparedStatement statement = connection.prepareStatement("UPDATE posts SET likes = 0 WHERE post_id = ?");
+        PreparedStatement statement = connection.prepareStatement("UPDATE posts SET likes = 0 WHERE id = ?");
         statement.setInt(1, postId);
         statement.executeUpdate();
     }

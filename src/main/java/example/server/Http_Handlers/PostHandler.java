@@ -1,6 +1,7 @@
 package example.server.Http_Handlers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import example.server.Controller.Comment_Controller;
 import example.server.Controller.Hashtag_Controller;
@@ -8,6 +9,7 @@ import example.server.Controller.Like_Controller;
 import example.server.Controller.Post_Controller;
 import example.server.Server;
 import example.server.Utilities.Authorization_Util;
+import example.server.Utilities.TimestampAdapter;
 import example.server.Utilities.jwt_Util;
 import example.server.models.Comment;
 import example.server.models.Hashtag;
@@ -24,7 +26,9 @@ import java.util.Collections;
 public class PostHandler {
 
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Timestamp.class, new TimestampAdapter())
+            .create();
 
 
     public static void newPostHandler(HttpExchange exchange) throws IOException {
@@ -80,11 +84,12 @@ public class PostHandler {
             return;
         }
 
-        String [] uri = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(uri[1]);
+
+        String reqBody = new String(exchange.getRequestBody().readAllBytes());
+        Post post = gson.fromJson(reqBody, Post.class);
 
         try {
-            Post_Controller.deletePost(Post_Controller.getPostById(postId));
+            Post_Controller.deletePost(Post_Controller.getPostById(post.getId()));
             Server.sendResponse(exchange,200,"Post was successfully deleted");
         }
         catch (SQLException e) {
@@ -94,7 +99,7 @@ public class PostHandler {
     }
 
     public static void postLikeHandler(HttpExchange exchange) throws IOException {
-        //check Authorization
+//        //check Authorization
         String token = Authorization_Util.getAuthToken(exchange);
         if (token == null) {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Authorization token is missing ")));
@@ -107,9 +112,11 @@ public class PostHandler {
         }
 
         String emailOfLike = jwt_Util.parseToken(token);
-        String [] url = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(url[1]);
-        Like like = new Like(postId,emailOfLike);
+
+        String reqBody = new String(exchange.getRequestBody().readAllBytes());
+        Post post = gson.fromJson(reqBody, Post.class);
+
+        Like like = new Like(post.getId(),emailOfLike);
         try{
             Like_Controller.insertLike(like);
             Server.sendResponse(exchange,200,"Liked Successfully");
@@ -134,12 +141,13 @@ public class PostHandler {
         }
 
         String emailOfLike = jwt_Util.parseToken(token);
-        String [] url = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(url[1]);
-        Like like = new Like(postId,emailOfLike);
+
+        String reqBody = new String(exchange.getRequestBody().readAllBytes());
+        Post post = gson.fromJson(reqBody, Post.class);
+        Like like = new Like(post.getId(),emailOfLike);
         try {
-            Like_Controller.deleteLike(url[2],postId);
-            Server.sendResponse(exchange,200,"Disliked Successfully");
+            Like_Controller.deleteLike(like);
+            Server.sendResponse(exchange, 200,"Disliked Successfully");
         } catch (SQLException e) {
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());
         } catch (Exception e){
@@ -163,9 +171,6 @@ public class PostHandler {
         String emailOfComment = jwt_Util.parseToken(token);
         String RequestBody = new String(exchange.getRequestBody().readAllBytes());
         Comment comment = gson.fromJson(RequestBody,Comment.class);
-        String [] url = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(url[1]);
-        comment.setPostId(postId);
         comment.setEmail(emailOfComment);
         try {
             Comment_Controller.insertComment(comment);
@@ -191,12 +196,13 @@ public class PostHandler {
         String emailOfComment = jwt_Util.parseToken(token);
         String RequestBody = new String(exchange.getRequestBody().readAllBytes());
         Comment comment = gson.fromJson(RequestBody,Comment.class);
-        String[] url = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(url[1]);
-        comment.setPostId(postId);
-        comment.setEmail(emailOfComment);
+
 
         try {
+            if(!Comment_Controller.getCommenter(comment.getId()).equals(emailOfComment)  && !Post_Controller.getPoster(comment.getPostId()).equals(emailOfComment))
+                Server.sendResponse(exchange,403,"You are not allowed to delete this comment");
+
+            comment.setEmail(emailOfComment);
             Comment_Controller.deleteComment(comment);
             Server.sendResponse(exchange, 200, "Comment was successfully deleted from this post");
         } catch (SQLException e) {
@@ -216,13 +222,12 @@ public class PostHandler {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
             return;
         }
+        String EmailOfComment = jwt_Util.parseToken(token);
 
-        String[] url = exchange.getRequestURI().getPath().split("/");
+
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         Comment comment = gson.fromJson(requestBody,Comment.class);
-        int postId = Integer.parseInt(url[1]);
-        comment.setPostId(postId);
-        comment.setEmail(jwt_Util.parseToken(token));
+        comment.setEmail(EmailOfComment);
           try {
             Comment_Controller.updateComment(comment);
             Server.sendResponse(exchange, 200, "Comment Updated successfully");
@@ -242,27 +247,29 @@ public class PostHandler {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
             return;
         }
+        String EmailOfToken = jwt_Util.parseToken(token);
 
-        String[] url = exchange.getRequestURI().getPath().split("/");
         String requestBody = new String(exchange.getRequestBody().readAllBytes());
         Post post = gson.fromJson(requestBody,Post.class);
-        int postId = Integer.parseInt(url[1]);
-        post.setId(postId);
 
 
         try {
-            if(post.getContent()==null){
-            Post_Controller.updatePost(post);
-            Server.sendResponse(exchange, 200, "Post Updated successfully");
-            }
-            else {
-               Post_Controller.updatePost(post);
-                Hashtag_Controller.deleteHashtagsOfPost(postId);
-                ArrayList<String> hashtags = returnHashTags(post);
-                for(String hashtag : hashtags){
-                    Hashtag_Controller.insertHashtag(new Hashtag(postId,hashtag));
+            if(Post_Controller.getPoster(post.getId()).equals(EmailOfToken)) {
+                if (post.getContent() == null) {
+                    Post_Controller.updatePost(post);
+                    Server.sendResponse(exchange, 200, "Post Updated successfully");
+                } else {
+                    Post_Controller.updatePost(post);
+                    Hashtag_Controller.deleteHashtagsOfPost(post.getId());
+                    ArrayList<String> hashtags = returnHashTags(post);
+                    for (String hashtag : hashtags) {
+                        Hashtag_Controller.insertHashtag(new Hashtag(post.getId(), hashtag));
+                    }
+                    Server.sendResponse(exchange, 200, "Post Updated successfully");
                 }
             }
+            else
+                Server.sendResponse(exchange, 403, "You are not allowed to update this post");
         }
         catch (IllegalArgumentException e){
             Server.sendResponse(exchange, 400,"Bad Request : " + e.getMessage());
@@ -285,16 +292,19 @@ public class PostHandler {
             return;
         }
 
-        String[] url = exchange.getRequestURI().getPath().split("/");
-        String hashtag = url[0];
+
+        String reqBody = new String(exchange.getRequestBody().readAllBytes());
+        Hashtag hashtag = gson.fromJson(reqBody,Hashtag.class);
         ArrayList<Post> posts = new ArrayList<>();
-        ArrayList <Integer> postIds ;
+        ArrayList<Integer> postIds ;
         try {
-            postIds = Hashtag_Controller.getPostIdsOfHashtag(hashtag);
+            postIds = Hashtag_Controller.getPostIdsOfHashtag(hashtag.getHashtag());
            for (Integer postId : postIds) {
                posts.add(Post_Controller.getPostById(postId));
            }
-           Server.sendResponse(exchange, 200, gson.toJson(posts));
+
+                 Server.sendResponse(exchange, 200, gson.toJson(posts.get(0)));
+
         }
         catch (SQLException e){
             Server.sendResponse(exchange, 500, "A problem was found in the Database : " + e.getMessage());

@@ -62,14 +62,13 @@ public class Post_DataBase {
         statement.executeUpdate();
     }
 
-    public Post getPost(int id) throws SQLException {
+    public Post getPost(int Post_id) throws SQLException {
 
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE id=?");
-        statement.setInt(1,id);
+        statement.setInt(1,Post_id);
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
-            int postId = resultSet.getInt("id");
             String author = resultSet.getString("email");
             String title = resultSet.getString("title");
             String content = resultSet.getString("content");
@@ -77,9 +76,20 @@ public class Post_DataBase {
             int likes = resultSet.getInt("likes");
             int comments = resultSet.getInt("comments");
 
-            return new Post(postId,likes,comments,author,title,content,createdAt);
+            return new Post(Post_id,likes,comments,author,title,content,createdAt);
         }
 
+        return null;
+    }
+
+    public String getPosterEmail(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE id=?");
+        statement.setInt(1,id);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            String Email = resultSet.getString("email");
+            return Email;
+        }
         return null;
     }
 

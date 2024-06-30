@@ -19,7 +19,7 @@ public class Comment_DataBase {
                 + "email VARCHAR(255) NOT NULL,"
                 + "commentDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                 + "message VARCHAR(1250) NOT NULL,"
-                + "FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,"
+                + "FOREIGN KEY (PostId) REFERENCES posts (id) ON DELETE CASCADE ON UPDATE CASCADE,"
                 + "FOREIGN KEY (email) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE"
                 + ");");
 
@@ -28,7 +28,7 @@ public class Comment_DataBase {
     }
 
     public void insertComment(Comment comment) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO comments (post_id, email, message) VALUES (?, ?, ?)");
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO comments (PostId, email, message) VALUES (?, ?, ?)");
         statement.setInt(1, comment.getPostId());
         statement.setString(2, comment.getEmail());
         statement.setString(3,comment.getComment());
@@ -40,7 +40,7 @@ public class Comment_DataBase {
     }
 
     public void updateComment(Comment comment) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("UPDATE comments SET comment = ? WHERE id = ?");
+        PreparedStatement statement = connection.prepareStatement("UPDATE comments SET message = ? WHERE id = ?");
         statement.setString(1, comment.getComment());
         statement.setInt(2, comment.getId());
         statement.executeUpdate();
@@ -84,7 +84,7 @@ public class Comment_DataBase {
     }
 
     public void deleteCommentByPostId(int postId) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("DELETE FROM comments WHERE post_id = ?");
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM comments WHERE PostId = ?");
         statement.setInt(1, postId);
         statement.executeUpdate();
 
@@ -112,6 +112,15 @@ public class Comment_DataBase {
         statement2.executeUpdate();
     }
 
+    public String getComment(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE id = ?");
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getString("email");
+        }
+        return null;
+    }
     public ArrayList<Comment> getAllComments() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments");
         ResultSet resultSet = statement.executeQuery();
@@ -119,9 +128,9 @@ public class Comment_DataBase {
         ArrayList<Comment> comments = new ArrayList<>();
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
-            int postId = resultSet.getInt("post_id");
+            int postId = resultSet.getInt("PostId");
             String email = resultSet.getString("email");
-            String comment = resultSet.getString("comment");
+            String comment = resultSet.getString("message");
             Timestamp commentDate = resultSet.getTimestamp("commentDate");
             comments.add(new Comment(id,postId,email,commentDate,comment));
 
@@ -130,14 +139,14 @@ public class Comment_DataBase {
     }
 
     public ArrayList<Comment> getCommentsOfPost(int postId) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE post_id = ?");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE PostId = ?");
         statement.setInt(1, postId);
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Comment> comments = new ArrayList<>();
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
             String email = resultSet.getString("email");
-            String comment = resultSet.getString("comment");
+            String comment = resultSet.getString("message");
             Timestamp commentDate = resultSet.getTimestamp("commentDate");
             comments.add(new Comment(id,postId,email,commentDate,comment));
 
@@ -152,8 +161,8 @@ public class Comment_DataBase {
         ArrayList<Comment> comments = new ArrayList<>();
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
-            int postId = resultSet.getInt("post_id");
-            String comment = resultSet.getString("comment");
+            int postId = resultSet.getInt("PostId");
+            String comment = resultSet.getString("message");
             Timestamp commentDate = resultSet.getTimestamp("commentDate");
             comments.add(new Comment(id,postId,email,commentDate,comment));
 
@@ -163,14 +172,14 @@ public class Comment_DataBase {
 
     }
     public ArrayList<Comment> getCommentsOfUserByPostId(String email,int postId) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement( "SELECT * FROM comments WHERE post_id = ? AND email = ?");
+        PreparedStatement statement = connection.prepareStatement( "SELECT * FROM comments WHERE PostId = ? AND email = ?");
         statement.setInt(1, postId);
         statement.setString(2, email);
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Comment> comments = new ArrayList<>();
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
-            String comment = resultSet.getString("comment");
+            String comment = resultSet.getString("message");
             Timestamp commentDate = resultSet.getTimestamp("commentDate");
             comments.add(new Comment(id,postId,email,commentDate,comment));
         }

@@ -19,11 +19,15 @@ public class Like_Controller {
     }
 
     public static void insertLike(Like like) throws SQLException {
-        likeDataBase.insertLike(like);
+        if(!likeDataBase.ExistLike(like))
+            likeDataBase.insertLike(like);
+        else
+            throw new SQLException("Like already exist");
+
     }
 
-    public static void deleteLike(String email , int postId) throws SQLException {
-        likeDataBase.deleteLike(postId, email);
+    public static void deleteLike(Like like) throws SQLException {
+        likeDataBase.deleteLike(like.getPostId(),like.getEmail());
     }
 
     public static void deleteLikesOfPost(int postId) throws SQLException {

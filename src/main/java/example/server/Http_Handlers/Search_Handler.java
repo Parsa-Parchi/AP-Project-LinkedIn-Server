@@ -15,9 +15,8 @@ public class Search_Handler {
     private static final Gson gson = new Gson();
 
     public static void searchByString(HttpExchange exchange) throws IOException {
-        HashMap<String, String> requestParams;
-        requestParams = (HashMap<String, String>) exchange.getAttribute("requestParams");
-        String searchString = requestParams.get("search");
+        String[] uri = exchange.getRequestURI().toString().split("/");
+        String searchString = uri[uri.length - 1];
 
         try {
             ArrayList<User> users = Search_Controller.getUsersBySearch(searchString);

@@ -28,8 +28,14 @@ public class Post_Controller {
     }
 
     public static void updatePost(Post post) throws SQLException {
-        if(isValidPost(post))
-             post_dataBase.updatePost(post);
+        if(isValidPost(post)) {
+            Post post1 = post_dataBase.getPost(post.getId());
+            if(post.getContent()!=null)
+                post1.setContent(post.getContent());
+            if(post.getTitle()!=null)
+                post1.setTitle(post.getTitle());
+            post_dataBase.updatePost(post1);
+        }
         else
             throw new IllegalArgumentException("Invalid Post : Content or title is empty");
     }
@@ -44,6 +50,10 @@ public class Post_Controller {
 
     public static void deleteAllPosts() throws SQLException {
         post_dataBase.deleteAllPosts();
+    }
+
+    public static String getPoster(int id) throws SQLException {
+        return post_dataBase.getPosterEmail(id);
     }
 
     public static Post getPostById(int id) throws SQLException {
@@ -62,7 +72,12 @@ public class Post_Controller {
     }
 
     public static boolean isValidPost(Post post) throws SQLException {
-        return !post.getContent().isEmpty() && !post.getTitle().isEmpty();
+        boolean Valid = true;
+        if(post.getContent()!=null)
+            Valid = Valid && !post.getContent().isEmpty();
+        if(post.getTitle()!=null)
+            Valid = Valid && !post.getTitle().isEmpty();
+        return Valid;
     }
 
 }
