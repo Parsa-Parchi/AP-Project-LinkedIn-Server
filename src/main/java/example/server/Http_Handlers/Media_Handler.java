@@ -1,10 +1,14 @@
 package example.server.Http_Handlers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import example.server.Controller.Media_Controller;
+import example.server.Controller.Post_Controller;
 import example.server.Server;
 import example.server.Utilities.Authorization_Util;
+import example.server.Utilities.TimestampAdapter;
+import example.server.Utilities.jwt_Util;
 import example.server.models.Media;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -17,11 +21,14 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
 public class Media_Handler {
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Timestamp.class, new TimestampAdapter())
+            .create();
     private static final String UPLOAD_DIRECTORY = "uploads";
 
 
@@ -37,14 +44,18 @@ public class Media_Handler {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
             return;
         }
+        String EmailOfToken = jwt_Util.parseToken(token);
+
 
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
 
         String [] url = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(url[2]);
+        int postId = Integer.parseInt(url[url.length-1]);
 
         try {
+
+            if(Post_Controller.getPoster(postId).equals(EmailOfToken)){
 
             List<FileItem> formItems = upload.parseRequest(new HttpExchangeRequestContext(exchange));
             if (formItems != null && !formItems.isEmpty()) {
@@ -53,25 +64,32 @@ public class Media_Handler {
                         String fileName = new File(item.getName()).getName();
                         String filePath = UPLOAD_DIRECTORY + File.separator + fileName;
                         File storeFile = new File(filePath);
-                        new File(storeFile.getParent()).mkdirs();
-                        item.write(storeFile);
-
-                        Media media_post = new Media( postId, filePath, fileName, item.getContentType(), item.getSize());
+                        if(!storeFile.exists()){
+                            new File(storeFile.getParent()).mkdirs();
+                            item.write(storeFile);
+                        }
+                        Media media_post = new Media(postId, filePath, fileName, item.getContentType(), item.getSize());
                         Media_Controller.insertMedia(media_post);
-                        Server.sendResponse(exchange,200,"File uploaded successfully: " + filePath);
+                        Server.sendResponse(exchange, 200, "File uploaded successfully: " + filePath);
                     }
+                 }
                 }
-
-            }
             else {
                 Server.sendResponse(exchange, 400, "No file uploaded");
+            }
+
+
+            }
+
+         else {
+             Server.sendResponse(exchange, 403, "You don't have permission to upload this file");
             }
 
 
         }
         catch(SQLException e)
         {
-            Server.sendResponse(exchange,500,"problem in database ");
+            Server.sendResponse(exchange,500,"problem in database : " + e.getMessage());
         }
         catch (Exception e) {
             Server.sendResponse(exchange, 500, "internal server error : " + e.getMessage());
@@ -91,8 +109,8 @@ public class Media_Handler {
         }
 
         String [] url = exchange.getRequestURI().getPath().split("/");
-        String requestedFile = url[3];
-        int postId = Integer.parseInt(url[2]);
+        String requestedFile = url[url.length-1];
+        int postId = Integer.parseInt(url[url.length-2]);
 
         Media media_post = null;
         try {
@@ -145,11 +163,20 @@ public class Media_Handler {
             return;
         }
 
+        String EmailOfToken = jwt_Util.parseToken(token);
+
         String [] url = exchange.getRequestURI().getPath().split("/");
-        String requestedFile = url[3];
-        int postId = Integer.parseInt(url[2]);
+        String requestedFile = url[url.length-1];
+        int postId = Integer.parseInt(url[url.length-2]);
         try {
-            Media_Controller.deleteMedia(requestedFile,postId);
+
+            if(Post_Controller.getPoster(postId).equals(EmailOfToken)){
+                Media_Controller.deleteMedia(requestedFile,postId);
+                Server.sendResponse(exchange,200,"deleted Successfully");
+            }
+            else
+                Server.sendResponse(exchange, 403, "You don't have permission to delete this file");
+
         }
         catch (SQLException e) {
             Server.sendResponse(exchange, 500, "problem in database ");
@@ -171,11 +198,18 @@ public class Media_Handler {
             Server.sendResponse(exchange, 401, gson.toJson(Collections.singletonMap("error ", "Invalid or expired token")));
             return;
         }
+        String EmailOfToken = jwt_Util.parseToken(token);
+
 
         String [] url = exchange.getRequestURI().getPath().split("/");
-        int postId = Integer.parseInt(url[2]);
+        int postId = Integer.parseInt(url[url.length-1]);
         try {
-            Media_Controller.deleteMediasOfPost(postId);
+            if(Post_Controller.getPoster(postId).equals(EmailOfToken)){
+                Media_Controller.deleteMediasOfPost(postId);
+                Server.sendResponse(exchange,200,"deleted Successfully");
+            }
+            else
+                Server.sendResponse(exchange, 403, "You don't have permission to delete this file");
         }
         catch (SQLException e) {
             Server.sendResponse(exchange, 500, "problem in database ");

@@ -17,7 +17,7 @@ public class PrivateChat_DataBase {
         PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS PrivateChat("
                 +"id INT AUTO_INCREMENT PRIMARY KEY,"
                 +"Sender VARCHAR(255) NOT NULL,"
-                +"Reciever VARCHAR(255) NOT NULL,"
+                +"Receiver VARCHAR(255) NOT NULL,"
                 +"message VARCHAR(1900),"
                 +"created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
                 +"mediaUrl VARCHAR(255),"
@@ -29,7 +29,7 @@ public class PrivateChat_DataBase {
     }
 
     public void insertMessage(Message message) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO PrivateChat(Sender, Reciever, message,mediaUrl) VALUES(?,?,?,?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO PrivateChat(Sender, Receiver, message, mediaUrl) VALUES (?, ?, ?, ?)");
         preparedStatement.setString(1, message.getSender());
         preparedStatement.setString(2, message.getReceiver());
         preparedStatement.setString(3,message.getText());

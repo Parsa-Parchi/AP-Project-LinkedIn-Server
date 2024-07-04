@@ -28,7 +28,7 @@ public class Message {
         this.timestamp = timestamp;
     }
 
-    public Message( String text, String sender, String receiver, Timestamp timestamp) {
+    public Message(String text, String sender, String receiver, Timestamp timestamp) {
         this.text = text;
         Sender = sender;
         Receiver = receiver;
@@ -37,7 +37,7 @@ public class Message {
 
 
 
-    public Message(String sender, String receiver, String text, String mediaUrl) {
+    public Message(String text , String sender, String receiver, String mediaUrl) {
         Sender = sender;
         Receiver = receiver;
         this.text = text;

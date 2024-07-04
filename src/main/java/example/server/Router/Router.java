@@ -46,15 +46,15 @@ public class Router {
         server.delete("/connect/delete/request",Connect_Handler::AcceptRequest); // besides this route send json of connect object including receiver email
         server.get("/connect/requests",Connect_Handler::getNotAcceptedConnectRequest);
 
-        server.post("/media/upload/{postId}", Media_Handler::UploadMedia);
-        server.get("/media/get/{postId}/{file_name}", Media_Handler::RetrieveMedia);
-        server.delete("/media/delete/{postId}/{file_name}", Media_Handler::deleteMedia);
-        server.delete("/media/delete/{postId}", Media_Handler::deleteMediasOfPost);
+        server.post("/media/upload", Media_Handler::UploadMedia); //after this route put postId
+        server.get("/media/get", Media_Handler::RetrieveMedia); //after this route put respectively postId and fileName to retrieve
+        server.delete("/media/delete", Media_Handler::deleteMedia); //after this route put respectively postId and fileName to delete
+        server.delete("/medias/delete", Media_Handler::deleteMediasOfPost); //after this route put postId to delete every media of post
 
-        server.post("/message", PrivateChat_Handler::messageUpload);
-        server.get("/chat/{EmailOfUser1}/{EmailOfUser2}", PrivateChat_Handler::RetrieveMessages);
-        server.delete("/messages/delete/{messageId}", PrivateChat_Handler::deleteMessage);
-        server.delete("/deleteHistory", PrivateChat_Handler::deleteHistory);
+        server.post("/message", PrivateChat_Handler::messageUpload); //send multipart/form-data
+        server.get("/chat", PrivateChat_Handler::RetrieveMessages); // after this route send email of two user : /chat/user1/user2
+        server.delete("/messages/delete", PrivateChat_Handler::deleteMessage); //after this route send email of two user : /message/delete/user1/user2
+        server.delete("/deleteHistory", PrivateChat_Handler::deleteHistory); //after this route send email of two user : /deleteHistory/user1/user2
 
     }
 

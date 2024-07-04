@@ -19,7 +19,7 @@ public class Media_DataBase {
         + "id INT AUTO_INCREMENT PRIMARY KEY,"
         + "post_id INT NOT NULL,"
         + "file_path VARCHAR(255) NOT NULL,"
-        + " file_name VARCHAR(255) NOT NULL,"
+        + "file_name VARCHAR(255) NOT NULL,"
         + "file_type VARCHAR(50),"
         + "file_size BIGINT,"
         + "upload_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"
@@ -32,7 +32,7 @@ public class Media_DataBase {
 
     public void insertMedia(Media media) throws SQLException {
 
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Media (post_id, file_path, file_name, file_type, file_size, upload_date) VALUES (?, ?, ?, ?, ?, ?)");
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Media (post_id, file_path, file_name, file_type, file_size) VALUES (?, ?, ?, ?, ?)");
         preparedStatement.setInt(1, media.getPostId());
         preparedStatement.setString(2, media.getFilePath());
         preparedStatement.setString(3, media.getFileName());

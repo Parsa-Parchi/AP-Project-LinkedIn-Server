@@ -41,7 +41,7 @@ public class Server  {
         return queryParams;
     }
 
-    public static void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
+    public static void sendResponse(HttpExchange exchange, int statusCode, String response)throws IOException  {
         if (response == null || response.isEmpty()) {
             exchange.sendResponseHeaders(statusCode, -1); // No response body
         } else {
